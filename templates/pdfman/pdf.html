@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PDF{% endblock %}
+{% block body %}
+    <div class="h-screen flex flex-col">
+        {% block toolbar %}
+            {% include "pdfman/includes/pdf_toolbar.html" %}
+        {% endblock %}
+        {% block display-content %}
+            <div class="basis-5/6 sm:basis-11/12" id="content">
+                {% include 'pdfman/includes/pdf_form.html' %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block JS %}
+    <script src="{% static 'js/pdfman.js' %}"></script>
+{% endblock %}
