@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>{% block title %}{% endblock %}</title>
+      <meta name="description" content="">
+      <!--Tailwind CSS-->
+      <link rel="stylesheet" href="{% static 'dist/output.css' %}" media="all">
+      <link rel="stylesheet" href="{% static 'dist/style.css' %}" media="all">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body class="h-w-screen sm:min-h-screen overflow-auto">
+        {% block body %}
+          
+            {% block toolbar %}
+            {% endblock %}
+            {% block display-content %}
+                {% include "includes/messages.html" %}
+            {% endblock %}
+        {% endblock %}
+        <script src="https://kit.fontawesome.com/bbbbfeba32.js" crossorigin="anonymous"></script>
+        <script src="{% static 'js/htmx.js' %}" crossorigin="anonymous"></script>
+        <!--Tooltips JS-->
+        <script src="{% static 'node_modules/flowbite/dist/flowbite.min.js' %}"></script>
+
+        {% block JS %}{% endblock %}
+    </body>
+</html>

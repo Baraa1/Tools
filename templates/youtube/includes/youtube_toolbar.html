@@ -1,0 +1,23 @@
+<!-- Mobile 1st design-->
+<!-- Navbar-->
+<nav>
+  <!-- Flex Container -->
+  <div class="w-full mx-0 py-4 px-2 h-42 sm:h-auto flex flex-col sm:flex-row items-center space-between gap-5 sm:gap-1 bg-ytPrimary">
+    <!-- Logo and Title -->
+    <div class="flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" height="3em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ff0000}</style><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      <span class="font-semibold text-3xl sm:text-xs tracking-tight pl-1 text-white">YouTube Download</span>
+    </div>
+    <!-- URL Bar -->
+    <form class="w-full flex flex-col sm:flex-row" enctype="multipart/form-data" action="" novalidate
+      hx-get="{% url 'get_video' %}"
+      hx-target="#content"
+      hx-swap="innerHTML">
+        <input class="basis-4/5 py-3 sm:py-2 rounded-s-sm border border-red-300 text-center shadow-sm placeholder-red-400
+        focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" type="text" name="video_id" id="video_id" placeholder="Video Link"/>
+        <button class="get-v basis-1/5 flex items-center justify-center rounded-e-sm p-0 py-1 bg-ytAccent font-bold text-2xl sm:text-l text-white hover:bg-opacity-50 hover:text-ytAccent transition-all transition:500ms" type="submit">
+          Get Video
+        </button>
+    </form>
+  </div>
+</nav>

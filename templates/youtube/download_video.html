@@ -1,0 +1,113 @@
+<!--inset-0 m-auto-->
+<!--Loading Animation-->
+<div class="absolute top-16 m-auto w-60 flex justify-center transit loader">
+  <svg class="spinner inset-0 m-auto animate-spin -ml-1 mr-3 h-24 w-24 text-black" xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <style>.spinner{fill:#000000}</style>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+</div>
+<form id="d-form" class="h-w-full sm:w-screen sm:flex sm:justify-center sm:mx-auto sm:px-4 overflow-auto bg-ytBackground" method="post" enctype="multipart/form-data" action="" novalidate
+  hx-post="{% url 'download_links' %}"
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+  hx-target="#content" hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="flex justify-center mb-2 sm:mb-0 sm:mr-2 py-3"><img class="thumb" src="{{ thumbnail }}"></div>
+    <hr class="bg-ytAccent">
+    <div>
+      <div class="flex items-center justify-center my-4">
+        <div class=" px-3">
+          <h1 class="text-ytText text-3xl font-bold">{% if video_title %}{{ video_title }}{% else %}Title{% endif %}</h1>
+        </div>
+      </div>
+      <hr class="bg-ytAccent">
+      <div class="flex justify-center mb-6 bg-ytSecondary">
+        <div class="px-3">
+          <p class="h-24 overflow-auto text-ytText text-l">{% if video_description %}{{ video_description }}{% else %}Description{% endif %}</p>
+        </div>
+      </div>
+      <hr class="bg-ytPrimary">
+      <div class="relative flex my-2">
+        <p class="text-ytAccent px-3 text-xl">Dash Streams: seperate files for Video and Audio</p>
+        <!-- Show tooltip on click TBD >
+        <div data-tooltip-target="tooltip-click" data-tooltip-trigger="click" class="flex items-center">
+          <svg class="bg-ytSecondary rounded-full border border-ytAccent p-1" xmlns="http://www.w3.org/2000/svg" height="1.25em" viewBox="0 0 320 512"><style>svg{fill:#000000}</style><path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg>
+        </div>
+        <div id="tooltip-click" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Tooltip content
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div-->
+      </div>
+      <div class="flex flex-wrap sm:flex-nowrap my-6">
+        <div class="w-full md:w-1/2 px-3 mb-1">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="video_quality">
+            Video Quality
+          </label>
+          <div class="relative">
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="video_quality" name="video_quality">
+              {% for quality, tag in available_video_qualities.items %}
+                  <option value="{{ tag }}">{{ quality }}</option>
+              {% endfor %}
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 px-3 mb-1">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="audio_quality">
+              Audio Quality
+            </label>
+            <div class="relative">
+              <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="audio_quality" name="audio_quality">
+                {% for quality, tag in available_audio_qualities.items %}
+                    <option value="{{ tag }}">{{ quality }}</option>
+                {% endfor %}
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+        </div>
+      </div>
+      <hr class="bg-ytPrimary">
+      <p class="text-ytAccent px-3 my-2 text-xl">Progressive Streams: Video with Audio</p>
+      <div class="flex flex-wrap my-2">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="video_quality">
+            Video Quality
+          </label>
+          <div class="relative">
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="p_video_quality" name="p_video_quality">
+              {% for quality, tag in available_p_video_qualities.items %}
+                  <option value="{{ tag }}">{{ quality }}</option>
+              {% endfor %}
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="bg-ytPrimary">
+      <div class="flex flex-wrap my-3">
+          <div class="w-full px-3">
+              <button class="bg-ytAccent w-full py-3 px-4 pr-8 text-white text-3xl font-bold hover:bg-opacity-70 transition-all transition:500ms get-l" type="submit">Generate Links</button>
+          </div>
+      </div>
+    </div>
+  </form>
+  <script>
+    document.querySelector(".get-v").addEventListener("click", function() {
+      document.querySelector('.loader').style.opacity = "1";
+      document.querySelector('#d-form').style.opacity = "0.1";
+      document.querySelector('#d-form').style.pointerEvents= "none";
+      //document.body.style.opacity= "0.1";
+      //this.style.backgroundColor = "#f7f7f7";
+    });
+    document.querySelector(".get-l").addEventListener("click", function() {
+      document.querySelector('.loader').style.opacity = "1";
+      document.querySelector('#d-form').style.opacity = "0.1";
+      document.querySelector('#d-form').style.pointerEvents= "none";
+    });
+  </script>

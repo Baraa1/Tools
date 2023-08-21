@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}YouTube Downloader{% endblock %}
+{% block toolbar %}
+  {% include "youtube/includes/youtube_toolbar.html" %}
+{% endblock %}
+{% block display-content %}
+  <div class="relative flex justify-center align-middle" id="content">
+    {% include 'youtube/download_video.html' %}
+  </div>
+{% endblock %}

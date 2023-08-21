@@ -1,0 +1,22 @@
+<!--Loading Animation-->
+<div class="absolute top-16 m-auto w-60 flex justify-center transit loader">
+    <svg class="inset-0 m-auto animate-spin -ml-1 mr-3 h-24 w-24 text-black" xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <style>svg{fill:#000000}</style>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </div>
+<div class="h-fit flex flex-col my-6 py-3 bg-ytSecondary" id="d-links">
+    <a href="{{ video_link }}" download="{{ filename }}" target="_blank" class="text-white text-2xl px-4 py-5 mb-3 bg-ytAccent">Download Video only: <b>{{ video_quality }}</b></a>
+    <a href="{{ audio_link }}" download="{{ filename }}" target="_blank" class="text-white text-2xl px-4 py-5 mb-3 bg-ytAccent">Download Audio only: <b>{{ audio_quality }}</b></a>
+    <a href="{{ p_video_link }}" download="{{ filename }}" target="_blank" class="text-white text-2xl px-4 py-5 bg-ytAccent">Download Video: <b>{{ p_video_quality }}</b></a>
+</div>
+<script>
+    document.querySelector(".get-v").addEventListener("click", function() {
+      document.querySelector('.loader').style.opacity = "1";
+      document.querySelector('#d-links').style.opacity = "0.1";
+      document.querySelector('#d-links').style.pointerEvents= "none";
+      //document.body.style.opacity= "0.1";
+      //this.style.backgroundColor = "#f7f7f7";
+    });
+  </script>
