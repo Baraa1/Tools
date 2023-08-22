@@ -7,14 +7,31 @@
         {% block toolbar %}
             {% include "pdfman/includes/pdf_toolbar.html" %}
         {% endblock %}
+        {% include "includes/messages.html" %}
         {% block display-content %}
             <div class="basis-5/6 sm:basis-11/12" id="content">
-                {% include 'pdfman/includes/pdf_form.html' %}
+                {% comment %}action="{% url 'upload' %}"{% endcomment %}
+                <form class="bg-sky-100 h-full sm:px-8 md:px-16 sm:py-8" method="post" enctype="multipart/form-data"  novalidate
+                    hx-post="{% url 'upload' %}"
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                    hx-trigger="change"
+                    hx-target="#messages" hx-swap="innerHTML">
+                    {% csrf_token %}
+                    {% include 'pdfman/includes/pdf_form.html' %}
+                </form>
             </div>
         {% endblock %}
     </div>
 {% endblock %}
 
 {% block JS %}
+    {% comment %}
     <script src="{% static 'js/pdfman.js' %}"></script>
+    {% endcomment %}
+    <script>
+        // click the hidden input of type file if the visible button is clicked
+        // and capture the selected files
+        const hidden = document.getElementById("hidden-input");
+        document.getElementById("button").onclick = () => hidden.click();
+    </script>
 {% endblock %}

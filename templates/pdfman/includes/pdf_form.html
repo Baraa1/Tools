@@ -1,5 +1,7 @@
+{% load widget_tweaks %}
+
 <!-- component -->
-<div class="bg-sky-100 h-full sm:px-8 md:px-16 sm:py-8">
+<div class=" h-full ">
     <main class="container mx-auto max-w-screen-lg h-full">
       <!-- file upload modal -->
       <article aria-label="File Upload Modal" class="relative h-full flex flex-col bg-white shadow-xl rounded-md">
@@ -10,22 +12,22 @@
               <path d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
             </svg>
           </i>
-          <p class="text-lg text-blue-700">Drop files to upload</p>
+          <!--p class="text-lg text-blue-700">Drop files to upload</p-->
         </div>
 
         <!-- scroll area -->
         <section class="h-full overflow-auto p-8 w-full h-full flex flex-col">
           <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
-            <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
+            <!--p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
               <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
-            </p>
-            <input id="hidden-input" type="file" multiple class="hidden" />
-            <button id="button" class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+            </p-->
+            {% render_field form.file_field id="hidden-input" type="file" class="hidden" multiple="" %}
+            <button type="button" id="button" class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
               Upload a file
             </button>
           </header>
 
-          <h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
+          <!--h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
             To Upload
           </h1>
 
@@ -34,7 +36,7 @@
               <img class="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
               <span class="text-small text-gray-500">No files selected</span>
             </li>
-          </ul>
+          </ul-->
         </section>
 
         <!-- sticky footer -->
@@ -42,7 +44,7 @@
           <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
             Upload now
           </button>
-          <button id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+          <button type="button" id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
             Cancel
           </button>
         </footer>
@@ -67,7 +69,7 @@
               </i>
             </span>
             <p class="p-1 size text-xs text-gray-700"></p>
-            <button class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800">
+            <button type="button" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800">
               <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
               </svg>
@@ -95,7 +97,7 @@
             </span>
 
             <p class="p-1 size text-xs"></p>
-            <button class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
+            <button type="button" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
               <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
               </svg>
