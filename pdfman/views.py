@@ -2,6 +2,8 @@
 #import string
 #import random
 #import mimetypes
+import os
+import subprocess
 # Django
 from pathlib import Path
 from django.shortcuts import render
@@ -10,6 +12,8 @@ from django.shortcuts import render
 #from django.views import View
 #from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.contrib.sessions.models import Session
+from django.db.models import signals
 #from django.core.files import File
 from django.contrib import messages
 # 3rd Party
@@ -52,19 +56,28 @@ class PdfManFormView(FormView):
 
     def upload_pdf(self, request, form):
         files       = form.cleaned_data["file_field"]
-        # Get or Create Directory
-        Path(f'{PDF_PATH}{request.session.session_key}').mkdir(parents=True, exist_ok=True)
+        folder_path = self.get_or_create_dir(request.session.session_key)
         for f in files:
             try:
                 pdf_handler = PdfWriter()
                 pdf_handler.append(f)
-                file_path = f'{PDF_PATH}{request.session.session_key}/{f}'
+                file_path = f'{folder_path}/{f}'
                 pdf_handler.write(file_path)
                 messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
             except:
                 messages.add_message(request, messages.WARNING, f"<b>{f}</b> not Uploaded - not a PDF file")
 
         return super().form_valid(form)
+    
+    def get_or_create_dir(self, k):
+        if Path(f'{PDF_PATH}{k}').exists():
+            return f'{PDF_PATH}{k}'
+        else:
+            # Get or Create Directory
+            Path(f'{PDF_PATH}{k}').mkdir(parents=True, exist_ok=True)
+            # echo "<command>" | at now + <interval>
+            os.system(f'echo rm -rf {PDF_PATH}{k} | at now + 1 hour')
+            return f'{PDF_PATH}{k}'
 
 #    def merge_pdf(request, files):
 #        merger = PdfWriter()
