@@ -23,7 +23,7 @@ from .forms import FileFieldForm
 N = 10
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-OUTPUT_PATH = f'{Path(__file__).resolve().parent.parent}/media/pdf/'
+PDF_PATH = f'{Path(__file__).resolve().parent.parent}/media/pdf/'
 
 def pdf_messages(request):
     return render(request, 'includes/messages.html')
@@ -49,14 +49,16 @@ class PdfManFormView(FormView):
         else:
             messages.warning(request, "File/s not Uploaded")
             return self.form_invalid(form)
-    
+
     def upload_pdf(self, request, form):
         files       = form.cleaned_data["file_field"]
+        # Get or Create Directory
+        Path(f'{PDF_PATH}{request.session.session_key}').mkdir(parents=True, exist_ok=True)
         for f in files:
             try:
                 pdf_handler = PdfWriter()
                 pdf_handler.append(f)
-                file_path = f'{OUTPUT_PATH}{f}'
+                file_path = f'{PDF_PATH}{request.session.session_key}/{f}'
                 pdf_handler.write(file_path)
                 messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
             except:
@@ -73,7 +75,7 @@ class PdfManFormView(FormView):
 #        for f in files:
 #            merger.append(f)
 #        # Creates a merged file with a randomly generated string to prevent overwriting
-#        merged_pdf = f'{OUTPUT_PATH}{res}-merged-pdf.pdf'
+#        merged_pdf = f'{PDF_PATH}{res}-merged-pdf.pdf'
 #        merger.write(merged_pdf)
 #        request.session['pdf_link'] = merged_pdf
 #        request.session['filename'] = f'{res}-merged-pdf.pdf'
