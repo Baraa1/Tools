@@ -3,52 +3,54 @@ imageTempl = document.getElementById("image-template"),
 empty = document.getElementById("empty");
 
 // use to store pre selected files
-let FILES = {};
+//let FILES = {};
 
 // check if file is of type image and prepend the initialied
 // template to the target element
-function addFile(target, file) {
-    const isImage = file.type.match("image.*"),
-    objectURL = URL.createObjectURL(file);
+//function addFile(target, file) {
+//    const isImage = file.type.match("image.*"),
+//    objectURL = URL.createObjectURL(file);
+//
+//    const clone = isImage
+//    ? imageTempl.content.cloneNode(true)
+//    : fileTempl.content.cloneNode(true);
+//
+//    clone.querySelector("h1").textContent = file.name;
+//    clone.querySelector("li").id = objectURL;
+//    clone.querySelector(".delete").dataset.target = objectURL;
+//    clone.querySelector(".size").textContent =
+//    file.size > 1024
+//        ? file.size > 1048576
+//        ? Math.round(file.size / 1048576) + "mb"
+//        : Math.round(file.size / 1024) + "kb"
+//        : file.size + "b";
+//
+//    isImage &&
+//    Object.assign(clone.querySelector("img"), {
+//        src: objectURL,
+//        alt: file.name
+//    });
+//
+//    empty.classList.add("hidden");
+//    target.prepend(clone);
+//
+//    FILES[objectURL] = file;
+//}
 
-    const clone = isImage
-    ? imageTempl.content.cloneNode(true)
-    : fileTempl.content.cloneNode(true);
-
-    clone.querySelector("h1").textContent = file.name;
-    clone.querySelector("li").id = objectURL;
-    clone.querySelector(".delete").dataset.target = objectURL;
-    clone.querySelector(".size").textContent =
-    file.size > 1024
-        ? file.size > 1048576
-        ? Math.round(file.size / 1048576) + "mb"
-        : Math.round(file.size / 1024) + "kb"
-        : file.size + "b";
-
-    isImage &&
-    Object.assign(clone.querySelector("img"), {
-        src: objectURL,
-        alt: file.name
-    });
-
-    empty.classList.add("hidden");
-    target.prepend(clone);
-
-    FILES[objectURL] = file;
-}
-
-const gallery = document.getElementById("gallery"),
+//const gallery = document.getElementById("gallery"),
 overlay = document.getElementById("overlay");
 
 // click the hidden input of type file if the visible button is clicked
 // and capture the selected files
-const hidden = document.getElementById("hidden-input");
-document.getElementById("button").onclick = () => hidden.click();
-hidden.onchange = (e) => {
-    for (const file of e.target.files) {
-    addFile(gallery, file);
-    }
-};
+const hidden   = document.getElementById("hidden-input");
+const submit_btn = document.getElementById("submit")
+const add_file = document.getElementById("button")
+add_file.onclick = () => hidden.click();
+//hidden.onchange = (e) => {
+//    for (const file of e.target.files) {
+//    addFile(gallery, file);
+//    }
+//};
 
 // use to check if a file is being dragged
 const hasFiles = ({ dataTransfer: { types = [] } }) =>
@@ -63,10 +65,23 @@ let counter = 0;
 function dropHandler(ev) {
     ev.preventDefault();
     for (const file of ev.dataTransfer.files) {
-        addFile(gallery, file);
+        //addFile(gallery, file);
         overlay.classList.remove("draggedover");
-        counter = 0;
-    }
+        //counter = 0;
+        // Create a new File object
+        let myFile = new File([file], file.name, {
+            type: file.type,
+            lastModified: file.lastModified,
+        });
+
+        // Now let's create a DataTransfer to get a FileList
+        let dataTransfer = new DataTransfer();
+        dataTransfer.items.add(myFile);
+        //console.log(typeof hidden.files)
+        hidden.files = dataTransfer.files;
+    };
+    add_file.style.pointerEvents = 'all';
+    submit_btn.click();
 }
 
 // only react to actual files being dragged
@@ -75,43 +90,46 @@ function dragEnterHandler(e) {
     if (!hasFiles(e)) {
         return;
     }
-    console.log(counter);
-    ++counter && overlay.classList.add("draggedover");
-    }
-    function dragLeaveHandler(e) {
-        console.log(counter);
-        1 > --counter && overlay.classList.remove("draggedover");
-    }
+    //++counter && overlay.classList.add("draggedover");
+    add_file.style.pointerEvents = 'none';
+    overlay.classList.add("draggedover");
+}
 
-    function dragOverHandler(e) {
-    if (hasFiles(e)) {
-        e.preventDefault();
-    }
+function dragLeaveHandler(e) {
+    //1 > --counter && overlay.classList.remove("draggedover");
+    overlay.classList.remove("draggedover");
+    add_file.style.pointerEvents = 'all';
+}
+
+function dragOverHandler(e) {
+if (hasFiles(e)) {
+    e.preventDefault();
+}
 }
 
 // event delegation to caputre delete events
 // fron the waste buckets in the file preview cards
-gallery.onclick = ({ target }) => {
-if (target.classList.contains("delete")) {
-  const ou = target.dataset.target;
-  document.getElementById(ou).remove(ou);
-  gallery.children.length === 1 && empty.classList.remove("hidden");
-  delete FILES[ou];
-}
-};
+//gallery.onclick = ({ target }) => {
+//if (target.classList.contains("delete")) {
+//  const ou = target.dataset.target;
+//  document.getElementById(ou).remove(ou);
+//  gallery.children.length === 1 && empty.classList.remove("hidden");
+//  delete FILES[ou];
+//}
+//};
 
 // print all selected files
-document.getElementById("submit").onclick = () => {
-    alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
-    console.log(FILES);
-};
+//document.getElementById("submit").onclick = () => {
+//    alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
+//    console.log(FILES);
+//};
 
 // clear entire selection
-document.getElementById("cancel").onclick = () => {
-    while (gallery.children.length > 0) {
-        gallery.lastChild.remove();
-    }
-    FILES = {};
-    empty.classList.remove("hidden");
-    gallery.append(empty);
-};
+//document.getElementById("cancel").onclick = () => {
+//    while (gallery.children.length > 0) {
+//        gallery.lastChild.remove();
+//    }
+//    FILES = {};
+//    empty.classList.remove("hidden");
+//    gallery.append(empty);
+//};
