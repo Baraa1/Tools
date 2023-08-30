@@ -14,8 +14,8 @@
                 <form class="bg-sky-100 h-full sm:px-8 md:px-16 sm:py-8" method="post" enctype="multipart/form-data"  novalidate
                     hx-post="{% url 'upload' %}"
                     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-                    hx-trigger="submit, change delay:5s"
-                    hx-target="#messages" hx-swap="innerHTML">
+                    hx-trigger="submit, change"
+                    hx-target="#gallery" hx-swap="afterbegin">
                     {% csrf_token %}
                     {% include 'pdfman/includes/pdf_form.html' %}
                 </form>

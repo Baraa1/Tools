@@ -1,9 +1,8 @@
 # Python
 #import string
 #import random
-#import mimetypes
 import os
-import subprocess
+from math import floor
 # Django
 from pathlib import Path
 from django.shortcuts import render
@@ -12,13 +11,13 @@ from django.shortcuts import render
 #from django.views import View
 #from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.contrib.sessions.models import Session
-from django.db.models import signals
+#from django.contrib.sessions.models import Session
+#from django.db.models import signals
 #from django.core.files import File
 from django.contrib import messages
 # 3rd Party
-from PyPDF2 import PdfWriter, PdfReader
-#import magic
+from PyPDF2 import PdfWriter
+from magic import from_file
 # Custom
 from .forms import FileFieldForm
 
@@ -39,8 +38,16 @@ class PdfManFormView(FormView):
 
     def get(self, request, *args, **kwargs):
         form = FileFieldForm()
+        # Get the path and create a list of the files in it
+        folder_path = self.get_or_create_dir(request.session.session_key)
+        files = Path(folder_path).glob('*')
+        # Create a list of file dicts
+        files_list = []
+        for fl in files:
+            files_list.append(self.get_file_data(f'{folder_path}/{fl.name}'))
         context = {
             "form":form,
+            "files_list":False if len(files_list) <= 0 else files_list,
         }
         return render(request, 'pdfman/pdf.html',context)
     # HTMX, triggered each time the user clicks upload file and selects a file
@@ -63,11 +70,14 @@ class PdfManFormView(FormView):
                 pdf_handler.append(f)
                 file_path = f'{folder_path}/{f}'
                 pdf_handler.write(file_path)
-                messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
+                pdf_handler.close()
+                #messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
+                context = self.get_file_data(file_path)
+
             except:
                 messages.add_message(request, messages.WARNING, f"<b>{f}</b> not Uploaded - not a PDF file")
 
-        return super().form_valid(form)
+            return render(request, "pdfman/includes/file.html", context)
     
     def get_or_create_dir(self, k):
         if Path(f'{PDF_PATH}{k}').exists():
@@ -79,6 +89,24 @@ class PdfManFormView(FormView):
             os.system(f'echo rm -rf {PDF_PATH}{k} | at now + 1 hour')
             return f'{PDF_PATH}{k}'
 
+    def get_file_data(self, file_path):
+        pdf_file = Path(file_path)
+        file_size = pdf_file.stat().st_size
+        if file_size > 1024:
+            if file_size > 1048576:
+                file_size = f'{floor(file_size / 1048576)}mb'
+            else:
+                file_size = f'{floor(file_size / 1024)}kb'
+        else:
+            file_size = f'{file_size}b'
+
+        context = {
+            "file_name":str(pdf_file.name),
+            "file_size":file_size,
+            "file_type":from_file(file_path, mime=True)
+        }
+        return context
+    
 #    def merge_pdf(request, files):
 #        merger = PdfWriter()
 #        # using random.choices()

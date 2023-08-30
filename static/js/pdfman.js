@@ -45,7 +45,10 @@ overlay = document.getElementById("overlay");
 const hidden   = document.getElementById("hidden-input");
 const submit_btn = document.getElementById("submit")
 const add_file = document.getElementById("button")
-add_file.onclick = () => hidden.click();
+add_file.onclick = () => {
+    hidden.click();
+    empty.classList.add("hidden")
+}
 //hidden.onchange = (e) => {
 //    for (const file of e.target.files) {
 //    addFile(gallery, file);
@@ -81,6 +84,7 @@ function dropHandler(ev) {
         hidden.files = dataTransfer.files;
     };
     add_file.style.pointerEvents = 'all';
+    empty.classList.add("hidden")
     submit_btn.click();
 }
 
