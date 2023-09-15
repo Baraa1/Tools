@@ -17,12 +17,12 @@
 
         <!-- scroll area -->
         <section class="h-full overflow-auto p-8 w-full h-full flex flex-col">
-          <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center bg-sky-100" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
+          <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center bg-indigo-50" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
             <!--p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
               <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
             </p-->
             {% render_field form.file_field id="hidden-input" type="file" class="hidden" multiple="" %}
-            <button type="button" id="button" class="mt-2 rounded-sm px-3 py-1 bg-sky-300 hover:bg-sky-400 focus:shadow-outline focus:outline-none">
+            <button type="button" id="button" class="mt-2 rounded-sm px-3 py-1 text-white bg-indigo-600 hover:bg-indigo-800 focus:shadow-outline focus:outline-none">
               Upload a file
             </button>
           </header>

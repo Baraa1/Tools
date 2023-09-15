@@ -1,9 +1,10 @@
-<div id="messages">
+<div id="messages" hx-get="{% url 'pdf_messages' %}" hx-trigger="every 30s">    
     {% if messages %}
+        <!-- Main modal -->
         {% for message in messages %}
-            <div class="text-red-700 text-center z-10 {{ message.tags }}">
+            <p class="text-base leading-relaxed text-red-500 dark:text-red-400">
                 {{ message|safe }}
-            </div>
+            </p>
         {% endfor %}
     {% endif %}
 </div>

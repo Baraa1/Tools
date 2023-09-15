@@ -1,6 +1,7 @@
 const fileTempl = document.getElementById("file-template"),
 imageTempl = document.getElementById("image-template"),
 empty = document.getElementById("empty");
+//const messages = document.getElementById("messages");
 
 // use to store pre selected files
 //let FILES = {};
@@ -48,6 +49,7 @@ const add_file = document.getElementById("button")
 add_file.onclick = () => {
     hidden.click();
     empty.classList.add("hidden")
+    //messages.classList.add("hidden")
 }
 //hidden.onchange = (e) => {
 //    for (const file of e.target.files) {
@@ -85,6 +87,7 @@ function dropHandler(ev) {
     };
     add_file.style.pointerEvents = 'all';
     empty.classList.add("hidden")
+    //messages.classList.add("hidden")
     submit_btn.click();
 }
 
@@ -106,10 +109,14 @@ function dragLeaveHandler(e) {
 }
 
 function dragOverHandler(e) {
-if (hasFiles(e)) {
-    e.preventDefault();
+    if (hasFiles(e)) {
+        e.preventDefault();
+    }
 }
-}
+
+function hideModal() { 
+    document.getElementById("defaultModal").style.display = 'none' 
+};
 
 // event delegation to caputre delete events
 // fron the waste buckets in the file preview cards

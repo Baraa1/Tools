@@ -73,11 +73,12 @@ class PdfManFormView(FormView):
                 pdf_handler.close()
                 #messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
                 context = self.get_file_data(file_path)
+                return render(request, "pdfman/includes/file.html", context)
 
             except:
-                messages.add_message(request, messages.WARNING, f"<b>{f}</b> not Uploaded - not a PDF file")
+                messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file')
+                return render(request, "pdfman/includes/file.html")
 
-            return render(request, "pdfman/includes/file.html", context)
     
     def get_or_create_dir(self, k):
         if Path(f'{PDF_PATH}{k}').exists():
