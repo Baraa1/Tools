@@ -80,7 +80,7 @@ class PdfManFormView(FormView):
                 context = self.get_file_data(file_path)
                 return render(request, "pdfman/includes/file.html", context)
             except:            
-                messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file')
+                messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file', extra_tags="rgb(220 38 38)")
                 return render(request, "pdfman/includes/file.html")
 
     
@@ -118,10 +118,10 @@ def delete_file(request):
     file_name = request.GET.get('file_name')
     try:
         os.system(f'rm {file_path}/{file_name}')
-        messages.add_message(request, messages.INFO, f'<b>"{file_name}"</b> was Deleted from server')
+        messages.add_message(request, messages.SUCCESS, f'<b>"{file_name}"</b> was Deleted from server', extra_tags="rgb(34 197 94)")
         return render(request, "pdfman/includes/file.html")
     except:
-        messages.add_message(request, messages.INFO, f'<b>"{file_name}"</b> was NOT deleted from server')
+        messages.add_message(request, messages.WARNING, f'<b>"{file_name}"</b> was NOT deleted from server', extra_tags="rgb(220 38 38)")
         context = PdfManFormView.get_file_data(f'{file_path}/{file_name}')
         return render(request, "pdfman/includes/file.html", context)
 
