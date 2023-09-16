@@ -8,7 +8,7 @@ from math import floor
 from pathlib import Path
 from django.shortcuts import render
 #from django.urls import reverse
-#from django.http import HttpResponse
+from django.http import HttpResponse
 #from django.views import View
 #from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
@@ -30,7 +30,13 @@ N = 10
 PDF_PATH = f'{Path(__file__).resolve().parent.parent}/media/pdf/'
 
 def pdf_messages(request):
-    return render(request, 'includes/messages.html')
+    message = messages.get_messages(request)
+    if message:
+        return render(request, 'includes/messages.html')
+    # this will cause an error keeping the previous message unchanged
+    # duct tape solutions at its best
+    else:
+        return None#HttpResponse('')
 
 class PdfManFormView(FormView):
     form_class = FileFieldForm
@@ -38,6 +44,9 @@ class PdfManFormView(FormView):
     success_url = "/PDF/pdf_messages/"
 
     def get(self, request, *args, **kwargs):
+        # create a session
+        if not request.session.session_key:
+            request.session.create()
         form = FileFieldForm()
         # Get the path and create a list of the files in it
         folder_path = self.get_or_create_dir(request.session.session_key)
@@ -67,6 +76,7 @@ class PdfManFormView(FormView):
         files       = form.cleaned_data["file_field"]
         folder_path = self.get_or_create_dir(request.session.session_key)
         # removes anything that isn't a letter, number or a dot to make file operations easier
+        # Some characters cause errors
         pattern = re.compile(r"[^\w\.]")
         for f in files:
             try:
