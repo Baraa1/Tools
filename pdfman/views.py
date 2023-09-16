@@ -1,6 +1,7 @@
 # Python
 #import string
 #import random
+import re
 import os
 from math import floor
 # Django
@@ -47,6 +48,7 @@ class PdfManFormView(FormView):
             files_list.append(self.get_file_data(f'{folder_path}/{fl.name}'))
         context = {
             "form":form,
+            "file_path":folder_path,
             "files_list":False if len(files_list) <= 0 else files_list,
         }
         return render(request, 'pdfman/pdf.html',context)
@@ -64,18 +66,20 @@ class PdfManFormView(FormView):
     def upload_pdf(self, request, form):
         files       = form.cleaned_data["file_field"]
         folder_path = self.get_or_create_dir(request.session.session_key)
+        # removes anything that isn't a letter, number or a dot to make file operations easier
+        pattern = re.compile(r"[^\w\.]")
         for f in files:
             try:
+                file_name = pattern.sub("", str(f))
                 pdf_handler = PdfWriter()
                 pdf_handler.append(f)
-                file_path = f'{folder_path}/{f}'
+                file_path = f'{folder_path}/{file_name}'
                 pdf_handler.write(file_path)
                 pdf_handler.close()
                 #messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
                 context = self.get_file_data(file_path)
                 return render(request, "pdfman/includes/file.html", context)
-
-            except:
+            except:            
                 messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file')
                 return render(request, "pdfman/includes/file.html")
 
@@ -104,10 +108,23 @@ class PdfManFormView(FormView):
         context = {
             "file_name":str(pdf_file.name),
             "file_size":file_size,
+            "file_path":file_path,
             "file_type":from_file(file_path, mime=True)
         }
         return context
     
+def delete_file(request):
+    file_path = request.GET.get('file_path')
+    file_name = request.GET.get('file_name')
+    try:
+        os.system(f'rm {file_path}/{file_name}')
+        messages.add_message(request, messages.INFO, f'<b>"{file_name}"</b> was Deleted from server')
+        return render(request, "pdfman/includes/file.html")
+    except:
+        messages.add_message(request, messages.INFO, f'<b>"{file_name}"</b> was NOT deleted from server')
+        context = PdfManFormView.get_file_data(f'{file_path}/{file_name}')
+        return render(request, "pdfman/includes/file.html", context)
+
 #    def merge_pdf(request, files):
 #        merger = PdfWriter()
 #        # using random.choices()
