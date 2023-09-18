@@ -144,3 +144,77 @@ function hideModal() {
 //    empty.classList.remove("hidden");
 //    gallery.append(empty);
 //};
+
+const sortableList = document.getElementById('gallery');
+const itemOrderInput = document.getElementById('item-order-input');
+const itemOrderForm = document.getElementById('item-order-form');
+
+// Function to update data-item-id attributes based on current order
+function updateItemIds() {
+  const sortableItems = sortableList.querySelectorAll('.sortable-item');
+  sortableItems.forEach((item, index) => {
+    item.dataset.itemId = index + 1; // You can adjust the starting number if needed
+  });
+}
+// Initialize item order when the page loads
+updateItemIds();
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+  
+function handleDragEnd(e) {
+this.style.opacity = '1';
+items.forEach(function (item) {
+    item.classList.remove('over');
+    });
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    return false;
+}
+
+/*function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
+}*/
+
+function handleDrop(e) {
+    e.stopPropagation(); // stops the browser from redirecting.
+    if (dragSrcEl !== this) {
+        dragSrcEl.innerHTML = this.innerHTML;
+        this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+    return false;
+}
+function activateDrDo() {
+    let items = document.querySelectorAll('.sortable-item');
+    items.forEach(function (item) {
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragover', handleDragOver);
+        //item.addEventListener('dragenter', handleDragEnter);
+        //item.addEventListener('dragleave', handleDragLeave);
+        item.addEventListener('dragend', handleDragEnd);
+        item.addEventListener('drop', handleDrop);
+    });
+}
+activateDrDo();
+
+function hasLiParent(element) {
+    let currentNode = element;
+    while (currentNode !== null) {
+      if (currentNode.tagName === 'LI') {
+        return true; // Found an <li> parent
+      }
+      currentNode = currentNode.parentNode;
+    }
+    return false; // No <li> parent found
+}

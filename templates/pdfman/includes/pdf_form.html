@@ -25,13 +25,14 @@
             <button type="button" id="button" class="mt-2 rounded-sm px-3 py-1 text-white bg-indigo-600 hover:bg-indigo-800 focus:shadow-outline focus:outline-none">
               Upload a file
             </button>
+            <input type="hidden" id="item-order-input" name="item_order" value="">
           </header>
 
           <!--h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
             To Upload
           </h1-->
 
-          <ul id="gallery" class="flex flex-1 flex-wrap m-1 py-3">
+          <ol id="gallery" class="flex flex-1 flex-wrap m-1 py-3">
             {% if files_list or file_name %}
               {% include 'pdfman/includes/file.html' %}
             {% else %}
@@ -40,7 +41,7 @@
                 <span class="text-small text-gray-500">No files selected</span>
               </li>
             {% endif %}
-          </ul>
+          </ol>
         </section>
 
         <!-- sticky footer -->

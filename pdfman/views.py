@@ -129,7 +129,7 @@ def delete_file(request):
     try:
         os.remove(f'{file_path}/{file_name}')
         messages.add_message(request, messages.SUCCESS, f'<b>"{file_name}"</b> was Deleted from server', extra_tags="rgb(34 197 94)")
-        return render(request, "pdfman/includes/file.html")
+        return HttpResponse('')
     except:
         messages.add_message(request, messages.WARNING, f'<b>"{file_name}"</b> was NOT deleted from server', extra_tags="rgb(220 38 38)")
         context = PdfManFormView.get_file_data(f'{file_path}/{file_name}')
