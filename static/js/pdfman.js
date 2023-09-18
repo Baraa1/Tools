@@ -48,7 +48,9 @@ const submit_btn = document.getElementById("submit")
 const add_file = document.getElementById("button")
 add_file.onclick = () => {
     hidden.click();
-    empty.classList.add("hidden")
+    if (empty !== null) {
+        empty.classList.add("hidden")
+    }
     //messages.classList.add("hidden")
 }
 //hidden.onchange = (e) => {
@@ -86,7 +88,9 @@ function dropHandler(ev) {
         hidden.files = dataTransfer.files;
     };
     add_file.style.pointerEvents = 'all';
-    empty.classList.add("hidden")
+    if (empty !== null) {
+        empty.classList.add("hidden");
+    }
     //messages.classList.add("hidden")
     submit_btn.click();
 }
@@ -146,9 +150,9 @@ function hideModal() {
 //};
 
 const sortableList = document.getElementById('gallery');
-const itemOrderInput = document.getElementById('item-order-input');
 const itemOrderForm = document.getElementById('item-order-form');
-
+const itemOrderInput = document.getElementById('item-order-input');
+let items;
 // Function to update data-item-id attributes based on current order
 function updateItemIds() {
   const sortableItems = sortableList.querySelectorAll('.sortable-item');
@@ -156,8 +160,34 @@ function updateItemIds() {
     item.dataset.itemId = index + 1; // You can adjust the starting number if needed
   });
 }
-// Initialize item order when the page loads
-updateItemIds();
+
+function collectItemDetails() {
+    const listitems = [];
+    const itemElements = sortableList.querySelectorAll('.sortable-item');
+  
+    itemElements.forEach((itemElement) => {
+      const itemId = itemElement.dataset.itemId;
+      const itemName = itemElement.querySelector('input[name="item_name"]').value;
+  
+      listitems.push({
+        id: itemId,
+        name: itemName,
+      });
+    });
+  
+    return listitems;
+}
+
+/*itemOrderForm.addEventListener('change', (e) => {
+    //e.preventDefault();
+    // Serialize the item order array and set it as the value of the hidden input field
+    const itemOrder = collectItemDetails();
+    itemOrderInput.value = JSON.stringify(itemOrder);
+    console.log('change');
+    console.log(itemOrder);
+    // Submit the form
+    //itemOrderForm.submit();
+});*/
 
 function handleDragStart(e) {
     this.style.opacity = '0.4';
@@ -168,9 +198,9 @@ function handleDragStart(e) {
 }
   
 function handleDragEnd(e) {
-this.style.opacity = '1';
-items.forEach(function (item) {
-    item.classList.remove('over');
+    this.style.opacity = '1';
+    items.forEach(function (item) {
+        item.classList.remove('over');
     });
 }
 
@@ -187,16 +217,23 @@ function handleDragLeave(e) {
     this.classList.remove('over');
 }*/
 
+function orderList(){
+    const itemOrder = collectItemDetails();
+    itemOrderInput.value = JSON.stringify(itemOrder);
+}
+
 function handleDrop(e) {
     e.stopPropagation(); // stops the browser from redirecting.
     if (dragSrcEl !== this) {
         dragSrcEl.innerHTML = this.innerHTML;
         this.innerHTML = e.dataTransfer.getData('text/html');
+        orderList();
     }
     return false;
 }
+
 function activateDrDo() {
-    let items = document.querySelectorAll('.sortable-item');
+    items = document.querySelectorAll('.sortable-item');
     items.forEach(function (item) {
         item.addEventListener('dragstart', handleDragStart);
         item.addEventListener('dragover', handleDragOver);
@@ -206,7 +243,11 @@ function activateDrDo() {
         item.addEventListener('drop', handleDrop);
     });
 }
+
+// Initialize item order when the page loads
+updateItemIds();
 activateDrDo();
+orderList();
 
 function hasLiParent(element) {
     let currentNode = element;

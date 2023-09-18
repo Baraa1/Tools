@@ -4,7 +4,9 @@
 import re
 import os
 from math import floor
+import json
 # Django
+from django.http import JsonResponse
 from pathlib import Path
 from django.shortcuts import render
 #from django.urls import reverse
@@ -61,6 +63,7 @@ class PdfManFormView(FormView):
             "files_list":False if len(files_list) <= 0 else files_list,
         }
         return render(request, 'pdfman/pdf.html',context)
+
     # HTMX, triggered each time the user clicks upload file and selects a file
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
