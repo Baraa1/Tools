@@ -1,12 +1,11 @@
 # Python
-#import string
-#import random
+import string
+import random
 import re
 import os
 from math import floor
 import json
 # Django
-from django.http import JsonResponse
 from pathlib import Path
 from django.shortcuts import render
 #from django.urls import reverse
@@ -31,6 +30,35 @@ N = 10
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PDF_PATH = f'{Path(__file__).resolve().parent.parent}/media/pdf/'
 
+
+def get_or_create_dir(k):
+    if Path(f'{PDF_PATH}{k}').exists():
+        return f'{PDF_PATH}{k}'
+    else:
+        # Get or Create Directory
+        Path(f'{PDF_PATH}{k}').mkdir(parents=True, exist_ok=True)
+        # echo "<command>" | at now + <interval>
+        os.system(f'echo rm -rf {PDF_PATH}{k} | at now + 1 hour')
+        return f'{PDF_PATH}{k}'
+
+def get_file_data(file_path):
+    pdf_file = Path(file_path)
+    file_size = pdf_file.stat().st_size
+    if file_size > 1024:
+        if file_size > 1048576:
+            file_size = f'{floor(file_size / 1048576)}mb'
+        else:
+            file_size = f'{floor(file_size / 1024)}kb'
+    else:
+        file_size = f'{file_size}b'
+
+    context = {
+        "file_name":str(pdf_file.name),
+        "file_size":file_size,
+        "file_type":from_file(file_path, mime=True)
+    }
+    return context
+
 def pdf_messages(request):
     message = messages.get_messages(request)
     if message:
@@ -38,7 +66,7 @@ def pdf_messages(request):
     # this will cause an error keeping the previous message unchanged
     # duct tape solutions at its best
     else:
-        return None#HttpResponse('')
+        return HttpResponse(status=204)#None#HttpResponse('')
 
 class PdfManFormView(FormView):
     form_class = FileFieldForm
@@ -51,12 +79,12 @@ class PdfManFormView(FormView):
             request.session.create()
         form = FileFieldForm()
         # Get the path and create a list of the files in it
-        folder_path = self.get_or_create_dir(request.session.session_key)
+        folder_path = get_or_create_dir(request.session.session_key)
         files = Path(folder_path).glob('*')
         # Create a list of file dicts
         files_list = []
         for fl in files:
-            files_list.append(self.get_file_data(f'{folder_path}/{fl.name}'))
+            files_list.append(get_file_data(f'{folder_path}/{fl.name}'))
         context = {
             "form":form,
             "file_path":folder_path,
@@ -77,54 +105,28 @@ class PdfManFormView(FormView):
 
     def upload_pdf(self, request, form):
         files       = form.cleaned_data["file_field"]
-        folder_path = self.get_or_create_dir(request.session.session_key)
+        folder_path = get_or_create_dir(request.session.session_key)
         # removes anything that isn't a letter, number or a dot to make file operations easier
         # Some characters cause errors
         pattern = re.compile(r"[^\w\.]")
         for f in files:
+            file_name = pattern.sub("", str(f))
+            file_path = f'{folder_path}/{file_name}'
+            if Path(f'{folder_path}/{file_name}').is_file():
+                messages.add_message(request, messages.INFO, f'<b>"{f}"</b> is already uploaded', extra_tags="#38bdf8")
+                return HttpResponse(status=204)
             try:
-                file_name = pattern.sub("", str(f))
                 pdf_handler = PdfWriter()
                 pdf_handler.append(f)
-                file_path = f'{folder_path}/{file_name}'
                 pdf_handler.write(file_path)
                 pdf_handler.close()
                 #messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Uploaded <a href="my-file-view/{file_path}/" target="_blank">View</a>')
-                context = self.get_file_data(file_path)
+                context = get_file_data(file_path)
                 context['file_path'] = folder_path
                 return render(request, "pdfman/includes/file.html", context)
             except:            
                 messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file', extra_tags="rgb(220 38 38)")
-                return render(request, "pdfman/includes/file.html")
-
-    
-    def get_or_create_dir(self, k):
-        if Path(f'{PDF_PATH}{k}').exists():
-            return f'{PDF_PATH}{k}'
-        else:
-            # Get or Create Directory
-            Path(f'{PDF_PATH}{k}').mkdir(parents=True, exist_ok=True)
-            # echo "<command>" | at now + <interval>
-            os.system(f'echo rm -rf {PDF_PATH}{k} | at now + 1 hour')
-            return f'{PDF_PATH}{k}'
-
-    def get_file_data(self, file_path):
-        pdf_file = Path(file_path)
-        file_size = pdf_file.stat().st_size
-        if file_size > 1024:
-            if file_size > 1048576:
-                file_size = f'{floor(file_size / 1048576)}mb'
-            else:
-                file_size = f'{floor(file_size / 1024)}kb'
-        else:
-            file_size = f'{file_size}b'
-
-        context = {
-            "file_name":str(pdf_file.name),
-            "file_size":file_size,
-            "file_type":from_file(file_path, mime=True)
-        }
-        return context
+                return HttpResponse(status=204)
     
 def delete_file(request):
     file_path = request.GET.get('file_path')
@@ -135,8 +137,33 @@ def delete_file(request):
         return HttpResponse('')
     except:
         messages.add_message(request, messages.WARNING, f'<b>"{file_name}"</b> was NOT deleted from server', extra_tags="rgb(220 38 38)")
-        context = PdfManFormView.get_file_data(f'{file_path}/{file_name}')
+        context = get_file_data(f'{file_path}/{file_name}')
         return render(request, "pdfman/includes/file.html", context)
+
+def merger(request):
+    if request.method == 'POST':
+        print(request.session.session_key)
+        folder_path = get_or_create_dir(request.session.session_key)
+        merger = PdfWriter()
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # generating random strings using random.choices()
+        res = ''.join(random.choices(string.ascii_lowercase + string.digits, k=N))
+        try:
+            # merges the files in the order they were added to the html form by the end user
+            for file_obj in ordered_list:
+                pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
+                merger.append(pdf_file)
+            # Creates a merged file with a randomly generated string to prevent overwriting
+            merged_pdf = f'{folder_path}/{res}-merged-pdf.pdf'
+            merger.write(merged_pdf)
+            merger.close()
+            context = get_file_data(merged_pdf)
+            context['file_path'] = folder_path
+            messages.add_message(request, messages.SUCCESS, f'Merged Successfully to <b>"{res}-merged-pdf.pdf"</b>', extra_tags="rgb(34 197 94)")
+            return render(request, "pdfman/includes/file.html", context)
+        except json.JSONDecodeError:
+            messages.add_message(request, messages.WARNING, 'Merge Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse('')
 
 #    def merge_pdf(request, files):
 #        merger = PdfWriter()

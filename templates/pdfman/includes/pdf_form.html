@@ -42,7 +42,7 @@
             hx-post="{% url 'merger' %}"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
             hx-trigger="submit"
-            hx-target="#gallery" hx-swap="afterbegin" class="h-full">
+            hx-target="#gallery" hx-swap="afterbegin" class="">
             {% csrf_token %}
 
             <ol id="gallery" name="gallery" class="flex flex-1 flex-wrap m-1 py-3 h-full">
@@ -56,12 +56,14 @@
               {% endif %}
             </ol>
             <input type="text" class="hidden" id="item-order-input" name="item_order" value="">
-            <button type="submit">Merge</button>
+            <div class="flex justify-center">
+              <button type="submit" class="rounded-sm text-xl px-4 py-2 bg-rose-500 hover:bg-rose-700 text-white focus:shadow-outline focus:outline-none">Merge</button>
+            </div>
           </form>
 
         </section>
 
-        <!-- sticky footer -->
+        <!-- sticky footer >
         <footer class="flex justify-end px-8 pb-8 pt-4">
           <button class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
             Merge
@@ -69,7 +71,7 @@
           <button type="button" id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
             Cancel
           </button>
-        </footer>
+        </footer-->
       </article>
     </main>
 </div>
