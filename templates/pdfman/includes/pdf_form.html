@@ -21,7 +21,7 @@
             hx-post="{% url 'upload' %}"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
             hx-trigger="submit, change"
-            hx-target="#gallery" hx-swap="afterbegin">
+            hx-target="#gallery" hx-swap="innerHTML">
             {% csrf_token %}
             <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center bg-indigo-50" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
               <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">

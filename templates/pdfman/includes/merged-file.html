@@ -9,7 +9,7 @@
             <p class="p-1 size text-xs text-rose-800">Type: {{ file_type }}</p>
             <p class="p-1 size text-xs text-gray-700">Size: {{ file_size }}</p>
             <div class="delete ml-auto flex text-gray-800">    
-                <svg hx-get="{% url 'delete_file' %}?file_name={{ file_name }}&file_path={{ file_path }}" hx-target="closest li" hx-swap="outerHTML"
+                <svg hx-get="{% url 'delete_file' %}?file_name={{ file_name }}&file_path={{ file_path }}" hx-target="closest li" hx-swap="outerHTML" onclick="removeLiParent();"
                 class="fill-current rounded-md p-2 w-8 h-8 focus:outline-none hover:bg-blue-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
                 </svg>

@@ -61,6 +61,16 @@ def get_file_data(file_path):
     }
     return context
 
+# Create a list of file dicts
+def list_files(folder_path):
+    # create a list of the files in this path
+    files = Path(folder_path).glob('*')
+    files_list = []
+    for fl in files:
+        files_list.append(get_file_data(f'{folder_path}/{fl.name}'))
+    
+    return files_list
+
 # create a session if not created
 def make_session(request):
     if not request.session.session_key:
@@ -107,12 +117,7 @@ class PdfManFormView(FormView):
         make_session(request)
         form = FileFieldForm()
         folder_path = get_or_create_dir(request.session.session_key)
-        # create a list of the files in this path
-        files = Path(folder_path).glob('*')
-        files_list = []
-        # Create a list of file dicts
-        for fl in files:
-            files_list.append(get_file_data(f'{folder_path}/{fl.name}'))
+        files_list = list_files(folder_path)
 
         context = {
             "form":form,
@@ -143,21 +148,25 @@ class PdfManFormView(FormView):
             file_name = pattern.sub("", str(f))
             file_path = f'{folder_path}/{file_name}'
             
-            if Path(f'{folder_path}/{file_name}').is_file():
+            if Path(file_path).is_file():
                 messages.add_message(request, messages.INFO, f'<b>"{f}"</b> is already uploaded', extra_tags="#38bdf8")
-                return HttpResponse(status=204)
-            
+                continue
             try:
                 # Saves the file on the server
                 upload_pdf(f, file_path)
+                files_list = list_files(folder_path)
                 messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Successfully Uploaded', extra_tags="#38bdf8")
-                context              = get_file_data(file_path)
-                context['file_path'] = folder_path
-                return render(request, "pdfman/includes/file.html", context)
             
             except:            
                 messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> was not Uploaded - it is not a <b>PDF</b> file', extra_tags="rgb(220 38 38)")
-                return HttpResponse(status=204)
+        
+        context = {
+            "form":form,
+            "file_path":folder_path,
+            "files_list":False if len(files_list) <= 0 else files_list,
+        }
+
+        return render(request, "pdfman/includes/files.html", context)
     
 def delete_file(request):
     file_path = request.GET.get('file_path')
@@ -181,7 +190,7 @@ def merger(request):
             merged_pdf = merge_pdf(folder_path, ordered_list)
             context                    = get_file_data(merged_pdf)
             context['file_path']       = folder_path
-            messages.add_message(request, messages.SUCCESS, f'Merged Successfully to <a href="/PDF/view_file/?file_path={merged_pdf}" target="_blank"><b>"{randomized_name}"</b></a>', extra_tags="rgb(34 197 94)")
+            messages.add_message(request, messages.SUCCESS, f'Your files were merged Successfully', extra_tags="rgb(34 197 94)")
             return render(request, "pdfman/includes/merged-file.html", context)
         
         except json.JSONDecodeError:

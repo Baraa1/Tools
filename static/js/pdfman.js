@@ -249,10 +249,11 @@ updateItemIds();
 activateDrDo();
 orderList();
 
-function hasLiParent(element) {
+function removeLiParent(element) {
     let currentNode = element;
     while (currentNode !== null) {
       if (currentNode.tagName === 'LI') {
+        currentNode.remove();
         return true; // Found an <li> parent
       }
       currentNode = currentNode.parentNode;
