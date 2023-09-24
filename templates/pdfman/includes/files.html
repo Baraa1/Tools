@@ -6,17 +6,17 @@
             <section class="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
                 <h1 class="flex-1 group-hover:text-blue-800 font-bold truncate overflow-hidden overflow-ellipsis">{{ file.file_name }}</h1>
                 <input type="text" class="hidden" disabled="" name="item_name" value="{{ file.file_name }}" multiple>
-                <div class="flex flex-col">
+                <div class="flex flex-col mt-1">
 
                     <p class="p-1 size text-xs text-blue-800">Type: {{ file.file_type }}</p>
                     <p class="p-1 size text-xs text-gray-700">Size: {{ file.file_size }}</p>
-                    <div class="delete ml-auto flex text-gray-800">    
+                    <div class="delete flex justify-between text-gray-800">    
                         <svg hx-get="{% url 'delete_file' %}?file_name={{ file.file_name }}&file_path={{ file_path }}" hx-target="closest li" hx-swap="outerHTML" onclick="removeLiParent();"
-                        class="fill-current rounded-md p-2 w-8 h-8 focus:outline-none hover:bg-gray-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        class="fill-red-600 rounded-md p-2 w-8 h-8 focus:outline-none hover:bg-red-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
                         </svg>
                         <a href="/PDF/view_file/?file_path={{ file_path }}/{{ file.file_name }}" download>
-                            <svg class="fill-current rounded-md p-2 w-8 h-8 focus:outline-none hover:bg-gray-300" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
+                            <svg class="fill-blue-600 rounded-md p-2 w-8 h-8 focus:outline-none hover:bg-blue-300" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
                         </a>
                     </div>
                 </div>
