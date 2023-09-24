@@ -88,7 +88,7 @@ def merge_pdf(folder_path, ordered_list):
     merger.write(merged_pdf)
     merger.close()
     
-    return merged_pdf, randomized_name
+    return merged_pdf
 
 def pdf_messages(request):
     message = messages.get_messages(request)
@@ -178,11 +178,11 @@ def merger(request):
         ordered_list = json.loads(request.POST.get('item_order'))
 
         try:
-            merged_pdf,randomized_name = merge_pdf(folder_path, ordered_list)
+            merged_pdf = merge_pdf(folder_path, ordered_list)
             context                    = get_file_data(merged_pdf)
             context['file_path']       = folder_path
             messages.add_message(request, messages.SUCCESS, f'Merged Successfully to <a href="/PDF/view_file/?file_path={merged_pdf}" target="_blank"><b>"{randomized_name}"</b></a>', extra_tags="rgb(34 197 94)")
-            return render(request, "pdfman/includes/file.html", context)
+            return render(request, "pdfman/includes/merged-file.html", context)
         
         except json.JSONDecodeError:
             messages.add_message(request, messages.WARNING, 'Merge Failed', extra_tags="rgb(220 38 38)")

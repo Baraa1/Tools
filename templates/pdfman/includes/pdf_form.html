@@ -46,7 +46,9 @@
             {% csrf_token %}
 
             <ol id="gallery" name="gallery" class="flex flex-1 flex-wrap m-1 py-3 h-full">
-              {% if files_list or file_name %}
+              {% if files_list %}
+                {% include 'pdfman/includes/files.html' %}
+              {% elif file_name %}
                 {% include 'pdfman/includes/file.html' %}
               {% else %}
                 <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
