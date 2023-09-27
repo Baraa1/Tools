@@ -42,9 +42,9 @@
             hx-post="{% url 'merger' %}"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
             hx-trigger="submit"
-            hx-target="#gallery" hx-swap="afterbegin" class="">
+            hx-target="#gallery" hx-swap="beforeend" class="">
             {% csrf_token %}
-
+            <h1 class="mt-1 pt-3 text-rose-600 text-center text-2xl">Drag and drop to re-organize files</h1>
             <ol id="gallery" name="gallery" class="flex flex-1 flex-wrap m-1 py-3 h-full">
               {% if files_list %}
                 {% include 'pdfman/includes/files.html' %}
@@ -59,7 +59,7 @@
             </ol>
             <input type="text" class="hidden" id="item-order-input" name="item_order" value="">
             <div class="flex justify-center">
-              <button type="submit" class="rounded-sm text-xl px-4 py-2 bg-rose-500 hover:bg-rose-700 text-white focus:shadow-outline focus:outline-none">Merge</button>
+              <button onclick="orderList();" type="submit" class="rounded-sm text-xl px-4 py-2 bg-rose-500 hover:bg-rose-700 text-white focus:shadow-outline focus:outline-none">Merge</button>
             </div>
           </form>
 

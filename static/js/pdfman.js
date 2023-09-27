@@ -1,6 +1,7 @@
 const fileTempl = document.getElementById("file-template"),
 imageTempl = document.getElementById("image-template"),
 empty = document.getElementById("empty");
+const messages = document.getElementById("messages");
 //const messages = document.getElementById("messages");
 
 // use to store pre selected files
@@ -161,17 +162,82 @@ function updateItemIds() {
   });
 }
 
+function validatePageRange(itemElement, pageRangeInput) {
+  const pages = parseInt(itemElement.querySelector("#pages").textContent)
+  console.log("2")
+  // Validate the input: "number-number" or "number"
+  const pattern = /^\d+(-\d+)?$/;
+  let startPage
+  let endPage;
+  let newMessage;
+  if (pattern.test(pageRangeInput)) {
+    // Input is valid, extract the start and end page numbers
+    //console.log(`Start Page: ${startPage}, End Page: ${endPage}`);
+    // Now you can use the start and end page numbers as needed
+    const pageRangeArray = pageRangeInput.split('-');
+    if (pageRangeArray.length === 2) {
+        // If there are two parts (start and end page), assign them to startPage and endPage
+        [startPage, endPage] = pageRangeArray;
+        startPage = parseInt(startPage)
+        endPage   = parseInt(endPage)
+    } else if (pageRangeArray.length === 1) {
+        // If there's only one part, assign it to startPage
+        startPage = pageRangeArray[0];
+        endPage   = "False"
+        startPage = parseInt(startPage)
+    } else {
+        // Input is not in the correct format
+        newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">Please enter a valid page range in the format "1-20".</p>`
+        messages.innerHTML = newMessage;
+    }
+
+    if (startPage > pages) {
+        // Input is not in the correct format
+        newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">Start page: ${startPage} Cannot be greater than the number of pages your file holds</p>`
+        messages.innerHTML = newMessage;
+    }
+    else if (endPage > pages) {
+        // Input is not in the correct format
+        newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">End page: ${endPage} Cannot be greater than the number of pages your file holds</p>`
+        messages.innerHTML = newMessage;
+    }
+    else if (startPage > endPage) {
+        // Input is not in the correct format
+        newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">End page: ${endPage} cannot be smaller than Start page: ${startPage}</p>`
+        messages.innerHTML = newMessage;
+    }
+    else if (startPage <= 0 || endPage <= 0) {
+        // Input is not in the correct format
+        newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">Start page or End page cannot be less than 1</p>`
+        messages.innerHTML = newMessage;
+    }
+    } else {
+    // Input is not in the correct format
+    newMessage = `<p class="text-center text-xl py-3 leading-relaxed text-white dark:text-red-400" style="background-color:rgb(220 38 38);">Please enter a valid page range in the format "1-20".</p>`
+    messages.innerHTML = newMessage;
+  }
+  return [startPage, endPage]
+}
+
 function collectItemDetails() {
     const listitems = [];
     const itemElements = sortableList.querySelectorAll('.sortable-item');
   
     itemElements.forEach((itemElement) => {
-      const itemId = itemElement.dataset.itemId;
-      const itemName = itemElement.querySelector('input[name="item_name"]').value;
-  
+      const itemId    = itemElement.dataset.itemId;
+      const itemName  = itemElement.querySelector('input[name="item_name"]').value;
+      const itemRange = itemElement.querySelector('input[name="page_range"]').value;
+      let startPage   = "False";
+      let endPage     = "False";
+      if (itemRange !== "") {
+        [startPage, endPage] = validatePageRange(itemElement ,itemRange)
+      }
+
       listitems.push({
         id: itemId,
         name: itemName,
+        startPage: startPage,
+        endPage: endPage,
       });
     });
   

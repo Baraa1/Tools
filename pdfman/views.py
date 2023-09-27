@@ -18,7 +18,7 @@ from django.contrib import messages
 #from django.db.models import signals
 #from django.core.files import File
 # 3rd Party
-from PyPDF2 import PdfWriter
+from PyPDF2 import PdfWriter, PdfReader
 from magic import from_file
 # Custom
 from .forms import FileFieldForm
@@ -43,7 +43,8 @@ def get_or_create_dir(k):
 
 def get_file_data(file_path):
     # Path has useful functions
-    pdf_file  = Path(file_path)
+    pdf_file   = Path(file_path)
+    pdf_reader = PdfReader(file_path)
     file_size = pdf_file.stat().st_size
     # convert the size into an easy to read number
     if file_size > 1024:
@@ -55,9 +56,10 @@ def get_file_data(file_path):
         file_size = f'{file_size}b'
 
     context = {
-        "file_name":str(pdf_file.name),
-        "file_size":file_size,
-        "file_type":from_file(file_path, mime=True)
+        "file_name": str(pdf_file.name),
+        "file_size": file_size,
+        "file_type": from_file(file_path, mime=True),
+        "file_pages": len(pdf_reader.pages)
     }
     return context
 
@@ -90,8 +92,18 @@ def merge_pdf(folder_path, ordered_list):
 
     # merges the files in the order chosen by the user
     for file_obj in ordered_list:
-        pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
-        merger.append(pdf_file)
+        if file_obj["startPage"] != "False":
+            start_page = int(file_obj["startPage"])-1
+            if file_obj["endPage"] != "False":
+                end_page = int(file_obj["endPage"])
+                pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
+                merger.append(pdf_file,pages=(start_page, end_page))
+            else:
+                pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
+                merger.append(pdf_file,pages=(start_page, start_page+1))
+        else:
+            pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
+            merger.append(pdf_file)
 
     # Where to save the file and what to name it
     merged_pdf = f'{folder_path}/{randomized_name}.pdf'
@@ -185,9 +197,9 @@ def merger(request):
     if request.method == 'POST':
         folder_path  = get_or_create_dir(request.session.session_key)
         ordered_list = json.loads(request.POST.get('item_order'))
-
+        # merges the files in the order chosen by the user
         try:
-            merged_pdf = merge_pdf(folder_path, ordered_list)
+            merged_pdf                 = merge_pdf(folder_path, ordered_list)
             context                    = get_file_data(merged_pdf)
             context['file_path']       = folder_path
             messages.add_message(request, messages.SUCCESS, f'Your files were merged Successfully', extra_tags="rgb(34 197 94)")
