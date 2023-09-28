@@ -1,12 +1,9 @@
 # Python
-import string
-import random
 import re
 import os
-from math import floor
 import json
-# Django
 from pathlib import Path
+# Django
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
@@ -17,100 +14,9 @@ from django.contrib import messages
 #from django.contrib.sessions.models import Session
 #from django.db.models import signals
 #from django.core.files import File
-# 3rd Party
-from PyPDF2 import PdfWriter, PdfReader
-from magic import from_file
 # Custom
 from .forms import FileFieldForm
-
-
-# initializing size of string
-N = 10
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-PDF_PATH = f'{Path(__file__).resolve().parent.parent}/media/pdf/'
-
-
-# Get or Create Directory
-def get_or_create_dir(k):
-    if Path(f'{PDF_PATH}{k}').exists():
-        return f'{PDF_PATH}{k}'
-    
-    Path(f'{PDF_PATH}{k}').mkdir(parents=True, exist_ok=True)
-    # Syntax: echo "<command>" | at now + <interval>
-    os.system(f'echo rm -rf {PDF_PATH}{k} | at now + 1 hour')
-    return f'{PDF_PATH}{k}'
-
-def get_file_data(file_path):
-    # Path has useful functions
-    pdf_file   = Path(file_path)
-    pdf_reader = PdfReader(file_path)
-    file_size = pdf_file.stat().st_size
-    # convert the size into an easy to read number
-    if file_size > 1024:
-        if file_size > 1048576:
-            file_size = f'{floor(file_size / 1048576)}mb'
-        else:
-            file_size = f'{floor(file_size / 1024)}kb'
-    else:
-        file_size = f'{file_size}b'
-
-    context = {
-        "file_name": str(pdf_file.name),
-        "file_size": file_size,
-        "file_type": from_file(file_path, mime=True),
-        "file_pages": len(pdf_reader.pages)
-    }
-    return context
-
-# Create a list of file dicts
-def list_files(folder_path):
-    # create a list of the files in this path
-    files = Path(folder_path).glob('*')
-    files_list = []
-    for fl in files:
-        files_list.append(get_file_data(f'{folder_path}/{fl.name}'))
-    
-    return files_list
-
-# create a session if not created
-def make_session(request):
-    if not request.session.session_key:
-        request.session.create()
-    return
-
-def upload_pdf(fh, file_path):
-    pdf_handler = PdfWriter()
-    pdf_handler.append(fh)
-    pdf_handler.write(file_path)
-    pdf_handler.close()
-
-def merge_pdf(folder_path, ordered_list):
-    merger             = PdfWriter()
-    # generating random strings using random.choices()
-    randomized_name    = ''.join(random.choices(string.ascii_lowercase + string.digits, k=N))
-
-    # merges the files in the order chosen by the user
-    for file_obj in ordered_list:
-        if file_obj["startPage"] != "False":
-            start_page = int(file_obj["startPage"])-1
-            if file_obj["endPage"] != "False":
-                end_page = int(file_obj["endPage"])
-                pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
-                merger.append(pdf_file,pages=(start_page, end_page))
-            else:
-                pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
-                merger.append(pdf_file,pages=(start_page, start_page+1))
-        else:
-            pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
-            merger.append(pdf_file)
-
-    # Where to save the file and what to name it
-    merged_pdf = f'{folder_path}/{randomized_name}.pdf'
-    merger.write(merged_pdf)
-    merger.close()
-    
-    return merged_pdf
+from .operations import *
 
 def pdf_messages(request):
     message = messages.get_messages(request)
@@ -135,6 +41,7 @@ class PdfManFormView(FormView):
             "form":form,
             "file_path":folder_path,
             "files_list":False if len(files_list) <= 0 else files_list,
+            "merge":True,
         }
         return render(request, 'pdfman/pdf.html',context)
 
@@ -208,6 +115,38 @@ def merger(request):
         except json.JSONDecodeError:
             messages.add_message(request, messages.WARNING, 'Merge Failed', extra_tags="rgb(220 38 38)")
             return HttpResponse('')
+
+def splitter(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        try:
+            splitted_pdf  = split_pdf(folder_path, ordered_list)
+            files_list    = list_files(folder_path)
+            context       = {
+                "files_list":files_list,
+                "file_path":folder_path,
+                }
+            messages.add_message(request, messages.SUCCESS, 'Your file/s were split Successfully', extra_tags="rgb(34 197 94)")
+            return render(request, "pdfman/includes/files.html", context)
+        
+        except:
+            messages.add_message(request, messages.WARNING, 'Split Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse('')
+    else:
+        make_session(request)
+        form = FileFieldForm()
+        files_list = list_files(folder_path)
+
+        context = {
+            "form":form,
+            "file_path":folder_path,
+            "files_list":False if len(files_list) <= 0 else files_list,
+            "split":True,
+        }
+        return render(request, 'pdfman/pdf.html',context)
 
 def view_file(request):
     file_path                = request.GET.get('file_path')
