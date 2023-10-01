@@ -148,6 +148,38 @@ def splitter(request):
         }
         return render(request, 'pdfman/pdf.html',context)
 
+def pdf_compressor(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        try:
+            compressed_pdf  = compress_pdf(folder_path, ordered_list)
+            files_list    = list_files(folder_path)
+            context       = {
+                "files_list":files_list,
+                "file_path":folder_path,
+                }
+            messages.add_message(request, messages.SUCCESS, 'Your file/s were compressed Successfully', extra_tags="rgb(34 197 94)")
+            return render(request, "pdfman/includes/files.html", context)
+        
+        except:
+            messages.add_message(request, messages.WARNING, 'Compressing Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse('')
+    else:
+        make_session(request)
+        form = FileFieldForm()
+        files_list = list_files(folder_path)
+
+        context = {
+            "form":form,
+            "file_path":folder_path,
+            "files_list":False if len(files_list) <= 0 else files_list,
+            "compress":True,
+        }
+        return render(request, 'pdfman/pdf.html',context)
+
 def view_file(request):
     file_path                = request.GET.get('file_path')
     response                 = HttpResponse(open(file_path, 'rb').read())

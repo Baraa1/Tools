@@ -8,6 +8,7 @@ urlpatterns = [
     path('delete_file/', delete_file, name='delete_file'),
     path('merger/', merger, name='merger'),
     path('splitter/', splitter, name='splitter'),
+    path('pdf_compressor/', pdf_compressor, name='pdf_compressor'),
     path('view_file/', view_file, name='view_file'),
     #path('viewpdf/', ViewPdfFile.as_view(), name='viewpdf'),
     #path('my-file-view/<path:file_name>/', MyFileView.as_view(), name='my_file_view'),

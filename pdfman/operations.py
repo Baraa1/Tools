@@ -5,6 +5,7 @@ from math import floor
 from pathlib import Path
 import os
 # 3rd Party
+import fitz  # PyMuPDF
 from PyPDF2 import PdfWriter, PdfReader
 from magic import from_file
 
@@ -107,16 +108,45 @@ def split_pdf(folder_path, ordered_list):
                 pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
                 splitter.append(pdf_file,pages=(start_page, end_page))
                 # Where to save the file and what to name it
-                split_pdf = f'{folder_path}/({start_page}-{end_page}){file_obj["name"]}'
+                splitted_pdf = f'{folder_path}/({start_page}-{end_page}){file_obj["name"]}'
             else:
                 pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
                 splitter.append(pdf_file,pages=(start_page, start_page+1))
-                split_pdf = f'{folder_path}/({start_page}){file_obj["name"]}'
+                splitted_pdf = f'{folder_path}/({start_page}){file_obj["name"]}'
         else:
             continue
 
-        split_list.append(split_pdf)
-        splitter.write(split_pdf)
+        split_list.append(splitted_pdf)
+        splitter.write(splitted_pdf)
         splitter.close()
     
     return split_list
+
+def compress_pdf(folder_path, ordered_list):
+    compress_list = []
+    # compress the files in the order chosen by the user
+    for file_obj in ordered_list:
+        input_pdf_path = f'{folder_path}/{file_obj["name"]}'
+        output_pdf_path = f'{folder_path}/compressed-{file_obj["name"]}'
+
+        pdf_document = fitz.open(input_pdf_path)
+        pdf_document.save(output_pdf_path, garbage=4, deflate=True, clean=True)
+        pdf_document.close()
+        compress_list.append(f'{folder_path}/compressed-{file_obj["name"]}')
+    
+    return compress_list
+# PyPdf2 method not very usefull
+#    for file_obj in ordered_list:
+#        reader = PdfReader(f'{folder_path}/{file_obj["name"]}')
+#        compressor = PdfWriter()
+#        for page in reader.pages:
+#            page.compress_content_streams()  # This is CPU intensive!
+#            compressor.add_page(page)
+#
+#        with open(f'{folder_path}/compressed-{file_obj["name"]}', "wb") as f:
+#            compressor.write(f)
+#            compressor.close()
+#
+#        compress_list.append(f'{folder_path}/compressed-{file_obj["name"]}')
+#    
+#    return compress_list

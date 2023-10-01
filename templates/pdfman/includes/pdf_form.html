@@ -42,6 +42,8 @@
             {% include 'pdfman/forms/merge.html' %}
           {% elif split %}
             {% include 'pdfman/forms/split.html' %}
+          {% elif compress %}
+            {% include 'pdfman/forms/compress.html' %}
           {% endif %}
 
         </section>
