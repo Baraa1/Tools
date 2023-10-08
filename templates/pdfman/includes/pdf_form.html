@@ -16,7 +16,7 @@
         </div>
 
         <!-- scroll area -->
-        <section class="h-full overflow-auto p-8 w-full h-full flex flex-col">
+        <section class="h-full overflow-auto no-scrollbar p-8 w-full h-full flex flex-col">
           <form method="post" enctype="multipart/form-data"  novalidate
             hx-post="{% url 'upload' %}"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
@@ -27,11 +27,11 @@
               <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
                 <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
               </p>
-              {% render_field form.file_field id="hidden-input" type="file" class="hidden" multiple="" %}
+              {% render_field form.file_field id="hidden-input" type="file" class="hidden" multiple="" accept="image/*, application/pdf, .pdf, .doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" %}
               <button type="button" id="button" class="mt-2 rounded-sm px-3 py-1 text-white bg-indigo-600 hover:bg-indigo-800 focus:shadow-outline focus:outline-none">
                 Upload a file
               </button>
-              <button id="submit" class="hidden"></button>
+              <button id="submit" name="pdf_button" class="hidden"></button>
             </header>
           </form>
 
@@ -44,6 +44,10 @@
             {% include 'pdfman/forms/split.html' %}
           {% elif compress %}
             {% include 'pdfman/forms/compress.html' %}
+          {% elif pdf2docx %}
+            {% include 'pdfman/forms/pdf2docx.html' %}
+          {% elif docx2pdf %}
+            {% include 'pdfman/forms/docx2pdf.html' %}
           {% endif %}
 
         </section>

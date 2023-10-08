@@ -12,6 +12,42 @@
           <a href="{% url 'upload' %}" class="nav-link text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">Merge PDF</a>
           <a href="{% url 'splitter' %}" class="nav-link text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">Split PDF</a>
           <a href="{% url 'pdf_compressor' %}" class="nav-link text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">Compress PDF</a>
+
+          <button id="ConvertButton" data-dropdown-toggle="dropdown" class="nav-link bg-green-300 rounded-sm p-2 font-bold border-green-300 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600 focus:ring-4 focus:outline-none focus:ring-green-300 inline-flex items-center" type="button">
+            Convert
+            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+            </svg>
+          </button>
+          
+          <!-- Dropdown menu -->
+          <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="ConvertButton">
+                <li>
+                  <a href="{% url 'convert_to_docx' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To Word</a>
+                </li>
+                <li>
+                  <a href="{% url 'convert_to_pdf' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Word To PDF</a>
+                </li>
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To jpeg</a>
+                </li>
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">jpeg To PDF</a>
+                </li>
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To png</a>
+                </li>
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">png To PDF</a>
+                </li>
+                <li>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                </li>
+              </ul>
+          </div>
+          <a href="{% url 'convert_to_docx' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">PDF To Word</a>
+          <a href="{% url 'convert_to_pdf' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">Word To PDF</a>          
         </div>
     </div>
   </nav>

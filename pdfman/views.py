@@ -51,12 +51,12 @@ class PdfManFormView(FormView):
         form       = self.get_form(form_class)
 
         if form.is_valid():
-            return self.upload_file(request, form)
+            return self.upload_files(request, form)
         else:
             messages.warning(request, "File/s were not Uploaded")
             return self.form_invalid(form)
 
-    def upload_file(self, request, form):
+    def upload_files(self, request, form):
         files       = form.cleaned_data["file_field"]
         folder_path = get_or_create_dir(request.session.session_key)
         # using re.compile with sub
@@ -66,13 +66,16 @@ class PdfManFormView(FormView):
         for f in files:
             file_name = pattern.sub("", str(f))
             file_path = f'{folder_path}/{file_name}'
-            
+            # returns true if mime type is invalid
+            if validate_file_extension(f):
+                messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> is an Unsupported file type', extra_tags="rgb(220 38 38)")
+                continue
             if Path(file_path).is_file():
                 messages.add_message(request, messages.INFO, f'<b>"{f}"</b> is already uploaded', extra_tags="#38bdf8")
                 continue
             try:
                 # Saves the file on the server
-                upload_pdf(f, file_path)
+                upload_file(f, file_path)
                 files_list = list_files(folder_path)
                 messages.add_message(request, messages.SUCCESS, f'<b>{f}</b> Successfully Uploaded', extra_tags="#38bdf8")
             
@@ -114,7 +117,29 @@ def merger(request):
         
         except json.JSONDecodeError:
             messages.add_message(request, messages.WARNING, 'Merge Failed', extra_tags="rgb(220 38 38)")
-            return HttpResponse('')
+            return HttpResponse(status=204)
+
+def post_response(request, folder_path, action):
+    files_list    = list_files(folder_path)
+    context       = {
+        "files_list":files_list,
+        "file_path":folder_path,
+        }
+    messages.add_message(request, messages.SUCCESS, f'Your file/s were {action} Successfully', extra_tags="rgb(34 197 94)")
+    return render(request, "pdfman/includes/files.html", context)
+
+def get_response(request, folder_path, action):
+    make_session(request)
+    form       = FileFieldForm()
+    files_list = list_files(folder_path)
+
+    context = {
+        "form":form,
+        "file_path":folder_path,
+        "files_list":False if len(files_list) <= 0 else files_list,
+        f'{action}':True,
+    }
+    return render(request, 'pdfman/pdf.html',context)
 
 def splitter(request):
     folder_path = get_or_create_dir(request.session.session_key)
@@ -124,29 +149,13 @@ def splitter(request):
         # split the files in the order chosen by the user
         try:
             splitted_pdf  = split_pdf(folder_path, ordered_list)
-            files_list    = list_files(folder_path)
-            context       = {
-                "files_list":files_list,
-                "file_path":folder_path,
-                }
-            messages.add_message(request, messages.SUCCESS, 'Your file/s were split Successfully', extra_tags="rgb(34 197 94)")
-            return render(request, "pdfman/includes/files.html", context)
+            return post_response(request, folder_path, 'split')
         
         except:
             messages.add_message(request, messages.WARNING, 'Split Failed', extra_tags="rgb(220 38 38)")
-            return HttpResponse('')
+            return HttpResponse(status=204)
     else:
-        make_session(request)
-        form = FileFieldForm()
-        files_list = list_files(folder_path)
-
-        context = {
-            "form":form,
-            "file_path":folder_path,
-            "files_list":False if len(files_list) <= 0 else files_list,
-            "split":True,
-        }
-        return render(request, 'pdfman/pdf.html',context)
+        return get_response(request, folder_path, 'split')
 
 def pdf_compressor(request):
     folder_path = get_or_create_dir(request.session.session_key)
@@ -156,29 +165,45 @@ def pdf_compressor(request):
         # split the files in the order chosen by the user
         try:
             compressed_pdf  = compress_pdf(folder_path, ordered_list)
-            files_list    = list_files(folder_path)
-            context       = {
-                "files_list":files_list,
-                "file_path":folder_path,
-                }
-            messages.add_message(request, messages.SUCCESS, 'Your file/s were compressed Successfully', extra_tags="rgb(34 197 94)")
-            return render(request, "pdfman/includes/files.html", context)
+            return post_response(request, folder_path, 'compress')
         
         except:
             messages.add_message(request, messages.WARNING, 'Compressing Failed', extra_tags="rgb(220 38 38)")
-            return HttpResponse('')
+            return HttpResponse(status=204)
     else:
-        make_session(request)
-        form = FileFieldForm()
-        files_list = list_files(folder_path)
+        return get_response(request, folder_path, 'compress')
 
-        context = {
-            "form":form,
-            "file_path":folder_path,
-            "files_list":False if len(files_list) <= 0 else files_list,
-            "compress":True,
-        }
-        return render(request, 'pdfman/pdf.html',context)
+def convert_to_docx(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        try:
+            converted_pdf = pdf_to_docx(folder_path, ordered_list)
+            return post_response(request, folder_path, 'pdf2docx')
+        
+        except:
+            messages.add_message(request, messages.WARNING, 'conversion to word Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse(status=204)
+    else:
+        return get_response(request, folder_path, 'pdf2docx')
+
+def convert_to_pdf(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        #try:
+        converted_word = docx_to_pdf(folder_path, ordered_list)
+        return post_response(request, folder_path, 'docx2pdf')
+        
+        #except:
+        #    messages.add_message(request, messages.WARNING, 'conversion to PDF Failed', extra_tags="rgb(220 38 38)")
+        #    return HttpResponse(status=204)
+    else:
+        return get_response(request, folder_path, 'docx2pdf')
 
 def view_file(request):
     file_path                = request.GET.get('file_path')
