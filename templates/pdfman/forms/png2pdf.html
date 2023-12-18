@@ -1,0 +1,24 @@
+<form id="item-order-form" method="post" enctype="multipart/form-data"
+hx-post="{% url 'png2pdf' %}"
+hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+hx-trigger="submit"
+hx-target="#gallery" hx-swap="innerHTML" class="">
+{% csrf_token %}
+<h1 class="mt-1 pt-3 text-rose-600 text-center text-2xl">Drag and drop to re-organize files</h1>
+<ol id="gallery" name="gallery" class="flex flex-1 flex-wrap m-1 py-3 h-full overflow-auto no-scrollbar">
+  {% if files_list %}
+    {% include 'pdfman/includes/files.html' %}
+  {% elif file_name %}
+    {% include 'pdfman/includes/file.html' %}
+  {% else %}
+    <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+      <img class="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
+      <span class="text-small text-gray-500">No files selected</span>
+    </li>
+  {% endif %}
+</ol>
+<input type="text" class="hidden" id="item-order-input" name="item_order" value="">
+<div class="flex justify-center gap-1">
+  <button onclick="orderList();" name="splitter" type="submit" class="rounded-sm text-xl px-4 py-2 bg-rose-500 hover:bg-rose-700 text-white focus:shadow-outline focus:outline-none transition ease-in duration-600">png To PDF</button>
+</div>
+</form>

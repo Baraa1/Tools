@@ -26,21 +26,27 @@
                 <li>
                   <a href="{% url 'convert_to_docx' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To Word</a>
                 </li>
+                <hr>
                 <li>
                   <a href="{% url 'convert_to_pdf' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Word To PDF</a>
                 </li>
+                <hr>
+                <li>
+                  <a href="{% url 'convert_to_png' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To png</a>
+                </li>
+                <hr>
+                <li>
+                  <a href="{% url 'png2pdf' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">png To PDF</a>
+                </li>
+                <hr>
                 <li>
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To jpeg</a>
                 </li>
+                <hr>
                 <li>
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">jpeg To PDF</a>
                 </li>
-                <li>
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">PDF To png</a>
-                </li>
-                <li>
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">png To PDF</a>
-                </li>
+                <hr>
                 <li>
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
                 </li>
@@ -48,6 +54,8 @@
           </div>
           <a href="{% url 'convert_to_docx' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">PDF To Word</a>
           <a href="{% url 'convert_to_pdf' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">Word To PDF</a>          
+          <a href="{% url 'convert_to_png' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">PDF To png</a>
+          <a href="{% url 'png2pdf' %}" class="nav-link d-nav hidden text-blue-900 rounded-sm p-2 font-bold border-blue-900 border hover:bg-white hover:text-blue-700 hover:border-none transition ease-in duration-600">png To PDF</a>
         </div>
     </div>
   </nav>

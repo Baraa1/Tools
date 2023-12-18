@@ -67,7 +67,7 @@ class PdfManFormView(FormView):
             file_name = pattern.sub("", str(f))
             file_path = f'{folder_path}/{file_name}'
             # returns true if mime type is invalid
-            if validate_file_extension(f):
+            if validate_file_extension(f.name):
                 messages.add_message(request, messages.WARNING, f'<b>"{f}"</b> is an Unsupported file type', extra_tags="rgb(220 38 38)")
                 continue
             if Path(file_path).is_file():
@@ -119,13 +119,13 @@ def merger(request):
             messages.add_message(request, messages.WARNING, 'Merge Failed', extra_tags="rgb(220 38 38)")
             return HttpResponse(status=204)
 
-def post_response(request, folder_path, action):
+def post_response(request, folder_path, conv_message):
     files_list    = list_files(folder_path)
     context       = {
         "files_list":files_list,
         "file_path":folder_path,
         }
-    messages.add_message(request, messages.SUCCESS, f'Your file/s were {action} Successfully', extra_tags="rgb(34 197 94)")
+    messages.add_message(request, messages.SUCCESS, conv_message, extra_tags="rgb(34 197 94)")
     return render(request, "pdfman/includes/files.html", context)
 
 def get_response(request, folder_path, action):
@@ -148,8 +148,8 @@ def splitter(request):
         ordered_list = json.loads(request.POST.get('item_order'))
         # split the files in the order chosen by the user
         try:
-            splitted_pdf  = split_pdf(folder_path, ordered_list)
-            return post_response(request, folder_path, 'split')
+            split_message = split_pdf(folder_path, ordered_list)
+            return post_response(request, folder_path, split_message)
         
         except:
             messages.add_message(request, messages.WARNING, 'Split Failed', extra_tags="rgb(220 38 38)")
@@ -163,13 +163,13 @@ def pdf_compressor(request):
     if request.method == 'POST':
         ordered_list = json.loads(request.POST.get('item_order'))
         # split the files in the order chosen by the user
-        try:
-            compressed_pdf  = compress_pdf(folder_path, ordered_list)
-            return post_response(request, folder_path, 'compress')
+        #try:
+        compress_message = compress_pdf(folder_path, ordered_list)
+        return post_response(request, folder_path, compress_message)
         
-        except:
-            messages.add_message(request, messages.WARNING, 'Compressing Failed', extra_tags="rgb(220 38 38)")
-            return HttpResponse(status=204)
+        #except:
+        #    messages.add_message(request, messages.WARNING, 'Compressing Failed', extra_tags="rgb(220 38 38)")
+        #    return HttpResponse(status=204)
     else:
         return get_response(request, folder_path, 'compress')
 
@@ -180,8 +180,8 @@ def convert_to_docx(request):
         ordered_list = json.loads(request.POST.get('item_order'))
         # split the files in the order chosen by the user
         try:
-            converted_pdf = pdf_to_docx(folder_path, ordered_list)
-            return post_response(request, folder_path, 'pdf2docx')
+            docx_message = pdf_to_docx(folder_path, ordered_list)
+            return post_response(request, folder_path, docx_message)
         
         except:
             messages.add_message(request, messages.WARNING, 'conversion to word Failed', extra_tags="rgb(220 38 38)")
@@ -195,15 +195,47 @@ def convert_to_pdf(request):
     if request.method == 'POST':
         ordered_list = json.loads(request.POST.get('item_order'))
         # split the files in the order chosen by the user
-        #try:
-        converted_word = docx_to_pdf(folder_path, ordered_list)
-        return post_response(request, folder_path, 'docx2pdf')
+        try:
+            docx_message = docx_to_pdf(folder_path, ordered_list)
+            return post_response(request, folder_path, docx_message)
         
-        #except:
-        #    messages.add_message(request, messages.WARNING, 'conversion to PDF Failed', extra_tags="rgb(220 38 38)")
-        #    return HttpResponse(status=204)
+        except:
+            messages.add_message(request, messages.WARNING, 'conversion to PDF Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse(status=204)
     else:
         return get_response(request, folder_path, 'docx2pdf')
+
+def convert_to_png(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        try:
+            png_message = pdf_to_png(folder_path, ordered_list)
+            return post_response(request, folder_path, png_message)
+        
+        except:
+            messages.add_message(request, messages.WARNING, 'conversion to png Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse(status=204)
+    else:
+        return get_response(request, folder_path, 'pdf2png')
+
+def png2pdf(request):
+    folder_path = get_or_create_dir(request.session.session_key)
+
+    if request.method == 'POST':
+        ordered_list = json.loads(request.POST.get('item_order'))
+        # split the files in the order chosen by the user
+        try:
+            png_message = png_to_pdf(folder_path, ordered_list)
+            return post_response(request, folder_path, png_message)
+        
+        except:
+            messages.add_message(request, messages.WARNING, 'conversion to pdf Failed', extra_tags="rgb(220 38 38)")
+            return HttpResponse(status=204)
+    else:
+        return get_response(request, folder_path, 'png2pdf')
 
 def view_file(request):
     file_path                = request.GET.get('file_path')

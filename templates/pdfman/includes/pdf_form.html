@@ -48,6 +48,10 @@
             {% include 'pdfman/forms/pdf2docx.html' %}
           {% elif docx2pdf %}
             {% include 'pdfman/forms/docx2pdf.html' %}
+          {% elif pdf2png %}
+            {% include 'pdfman/forms/pdf2png.html' %}
+          {% elif png2pdf %}
+            {% include 'pdfman/forms/png2pdf.html' %}
           {% endif %}
 
         </section>
