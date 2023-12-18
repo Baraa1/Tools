@@ -7,6 +7,7 @@ from os import path as os_path, system as system_command
 from mimetypes import guess_type
 from subprocess import run as run_command, CalledProcessError
 from PIL import Image
+import os
 # Django
 # 3rd Party
 import fitz # PyMuPDF
@@ -91,7 +92,6 @@ def validate_file_extension(uploaded_file, file_ext=None):
         if mime_type not in allowed_mime_types:
             return True#f"Unsupported file type: {mime_type}. Allowed types are {', '.join(allowed_mime_types)}."
     elif mime_type not in allowed_mime_dict[file_ext]:
-        print(file_ext, allowed_mime_dict[file_ext])
         return True
     return False
 
@@ -120,6 +120,7 @@ def merge_pdf(folder_path, ordered_list):
         else:
             pdf_file = open(f'{folder_path}/{file_obj["name"]}', 'rb')
             merger.append(pdf_file)
+        os.remove(f'{folder_path}/{file_obj["name"]}')
 
     # Where to save the file and what to name it
     merged_pdf = f'{folder_path}/{randomized_name}.pdf'
@@ -149,6 +150,7 @@ def split_pdf(folder_path, ordered_list):
                 splitted_pdf = f'{folder_path}/({start_page}){file_obj["name"]}'
         else:
             continue
+        os.remove(f'{folder_path}/{file_obj["name"]}')
 
         split_message += f'<br><b>{file_obj["name"]}</b> split successful<br>'
         splitter.write(splitted_pdf)
@@ -170,6 +172,7 @@ def compress_pdf(folder_path, ordered_list):
         pdf_document.save(output_pdf_path, garbage=4, deflate=True, clean=True)
         pdf_document.close()
         compress_message += f'<br><b>{file_obj["name"]}</b> Compress Successful<br>'
+        os.remove(f'{folder_path}/{file_obj["name"]}')
     
     return compress_message
 
@@ -187,6 +190,7 @@ def pdf_to_docx(folder_path, ordered_list):
         cv.close()
         docx_message += f'<br><b>{os_path.splitext(file_obj["name"])[0]}.docx</b> Converted Successfully<br>'
         #parse(pdf_file, docx_file)
+        os.remove(f'{folder_path}/{file_obj["name"]}')
     return docx_message
 
 def docx_to_pdf(folder_path, ordered_list):
@@ -204,6 +208,7 @@ def docx_to_pdf(folder_path, ordered_list):
         # Run the unoconv command
             run_command(unoconv_command, shell=True, check=True)
             docx_message += f'<br>Converted: <b>{file_obj["name"]}</b> to <b>{pdf_file}</b> Successfully<br>'
+            os.remove(f'{folder_path}/{file_obj["name"]}')
         except CalledProcessError as e:
             docx_message += f'<br>Error Converting: <b>{file_obj["name"]}</b> to <b>{pdf_file}</b><br>{e}<br>'
         except FileNotFoundError:
@@ -225,6 +230,7 @@ def pdf_to_png(folder_path, ordered_list):
             for page in pages:
                 page.save(png_file, 'PNG')
             png_message += f'<p>Done converting <b>{file_obj["name"]}</b> to <b>{os_path.splitext(file_obj["name"])[0]}.png</b></p><br>'
+            os.remove(f'{folder_path}/{file_obj["name"]}')
         except:
             png_message += f'Error converting <b>{file_obj["name"]}</b> to <b>{os_path.splitext(file_obj["name"])[0]}.png</b><br>'
 
@@ -244,6 +250,7 @@ def png_to_pdf(folder_path, ordered_list):
         try:
             im.save(pdf_file, save_all=True)
             png_message += f'<p>Done converting <b>{file_obj["name"]}</b> to <b>{os_path.splitext(file_obj["name"])[0]}.pdf</b></p><br>'
+            os.remove(f'{folder_path}/{file_obj["name"]}')
         except:
             png_message += f'Error converting <b>{file_obj["name"]}</b> to <b>{os_path.splitext(file_obj["name"])[0]}.pdf</b><br>'
 
