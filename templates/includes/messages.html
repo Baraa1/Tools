@@ -1,4 +1,4 @@
-<div id="messages" class="bg-sky-100 fixed left-8 transform w-1/5 mt-32 max-h-96 overflow-scroll no-scrollbar" hx-get="{% url 'pdf_messages' %}" hx-trigger="every 1s" hx-target="#messages" hx-swap="outerHTML">
+<div id="messages" class="bg-sky-100 fixed left-8 transform w-1/5 mt-32 max-h-96 overflow-scroll no-scrollbar" hx-get="{% url 'pdf_messages' %}" hx-trigger="everey 1s" hx-target="#messages" hx-swap="outerHTML">
     {% if messages %}
         {% for message in messages %}
             {% if 'info' in message.tags %}

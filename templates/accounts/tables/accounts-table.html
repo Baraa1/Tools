@@ -1,0 +1,25 @@
+<div class="w-11/12 sm:w-full overflow-scroll m-auto">
+    <table class="table-fixed sm:table-auto min-w-full border-collapse border border-red-700 rounded-l">
+        <thead class="bg-red-700 text-xl font-semibold border border-red-700 rounded">
+          <tr>
+            <th class="text-white p-5 border-r border-r-red-700">ID</th>
+            <th class="text-white border-r border-red-700">Username</th>
+            <th class="text-white border-r border-red-700">Email</th>
+            <th class="text-white border-r border-red-700">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+            {% for account in accounts %}
+                <tr {% if forloop.counter|divisibleby:"2" %}class="bg-red-200"{% endif %}>
+                    <td class="border-r border-red-500">{{ account.id }}</td>
+                    <td class="border-r border-red-500">{{ account.username }}</td>
+                    <td class="border-r border-red-500 truncate overflow-hidden overflow-ellipsis">{{ account.email }}</td>
+                    <td class="border-r border-red-500 py-3">
+                        <a href="{% url 'account-update' account.id %}" class="text-green-600 rounded-sm p-2 font-bold border-green-500 border hover:bg-green-500 hover:text-white hover:border-none transition ease-in duration-600">Update</a>
+                        <a href="{% url 'account-delete' account.id %}" class="text-red-600 rounded-sm p-2 font-bold border-red-500 border hover:bg-red-500 hover:text-white hover:border-none transition ease-in duration-600">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
