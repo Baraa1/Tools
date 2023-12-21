@@ -17,10 +17,13 @@
         PDF
     </a>
     {% comment %}
-    {% if user.is_authenticated and if user.is_superuser%}
+    {% if user.is_authenticated and if user.is_superuser %}
     {% endcomment %}
     <a href="{% url 'accounts' %}" class="relative w-60 flex justify-center gap-1 items-center bg-white p-3 rounded text-black text-3xl font-bolder border border-4 border-black ease-out duration-500 hover:bg-zinc-600 hover:text-white" >
         Accounts
+    </a>
+    <a href="{% url 'trust' %}" class="relative w-60 flex justify-center gap-1 items-center bg-white p-3 rounded text-black text-3xl font-bolder border border-4 border-black ease-out duration-500 hover:bg-zinc-600 hover:text-white" >
+        Trust
     </a>
   </div>
 {% endblock %}
