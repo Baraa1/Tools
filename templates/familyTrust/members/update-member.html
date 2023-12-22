@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}تعديل بيانات عضو{% endblock %}
+{% block body %}
+    <div class="h-screen flex flex-col">
+        {% block toolbar %}
+            {% include "familyTrust/includes/trust-toolbar.html" %}
+        {% endblock %}
+        {% include "includes/messages.html" %}
+        {% block display-content %}
+            <div class="basis-5/6 sm:basis-11/12" id="content">
+                <div class="bg-zinc-100 h-full sm:px-8 md:px-16 sm:py-8">
+                    <div class="flex justify-center items-start h-screen">
+                        <form method="post" enctype="multipart/form-data" action="" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" novalidate>
+                            {% csrf_token %}
+                            {% include 'familyTrust/members/forms/member-form.html' %}
+                            <div class="flex items-center justify-center">
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                    تعديل
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block JS %}
+{% endblock %}

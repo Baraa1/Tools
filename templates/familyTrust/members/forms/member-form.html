@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="member">
+        العضو
+    </label>
+    {% if form.member.errors %}
+        {% render_field form.member class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="العضو" readonly="" disabled="" %}
+        {% for error in form.member.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% if member_username %}
+            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="{{ member_username }}" readonly="" disabled="">
+        {% else %}
+            {% render_field form.member class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="العضو" %}
+        {% endif %}
+    {% endif %}
+</div>
+{% if form.position %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="position">
+            المنصب
+        </label>
+        {% if form.position.errors %}
+            {% render_field form.position class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="المنصب" %}
+            {% for error in form.position.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.position class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="المنصب" %}
+        {% endif %}
+    </div>
+{% endif %}

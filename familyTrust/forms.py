@@ -6,6 +6,11 @@ class MemberForm(forms.ModelForm):
         model = Member
         fields = '__all__'
 
+class UpdateMemberForm(forms.ModelForm):
+    class Meta:
+        model = Member
+        fields = ['position',]
+
 class TransactionTypeForm(forms.ModelForm):
     class Meta:
         model = TransactionType
