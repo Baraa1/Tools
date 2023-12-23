@@ -1,24 +1,28 @@
 <!-- Mobile 1st design-->
 <!-- Navbar-->
-<nav id="navb" class="basis-1/12 sm:basis-1/8 sticky top-0 z-10 py-4 bg-green-400 flex justify-center">
+<nav id="navb" class="basis-1/12 sticky top-0 z-10 py-4 bg-green-400 flex justify-center">
     <!-- Flex Container -->
-    <div class="flex flex-col items-center justify-center sm:flex-row-reverse w-full min-h-fit gap-5">
+    <div class="flex flex-col items-center justify-center lg:flex-row-reverse w-full min-h-fit gap-5">
       <!-- Logo and Title -->
-        <div class="flex items-center justify-center gap-3 sm:pr-5">
+        <div class="flex items-center justify-center gap-3 lg:pr-5">        
           <svg class="fill-green-900" xmlns="http://www.w3.org/2000/svg" height="40" width="38" viewBox="0 0 576 512"><path d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm64 320H64V320c35.3 0 64 28.7 64 64zM64 192V128h64c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64v64H448zm64-192c-35.3 0-64-28.7-64-64h64v64zM288 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
           <a href="{% url 'trust' %}" class="font-semibold text-3xl sm:text-3xl tracking-tight pl-1 text-white">صندوق العائلة</a>
-          <button id="hamburger" class="inline absolute top-6 right-8 hamburger md:hidden focus:outline-none">
+          <button id="hamburger" class="inline absolute top-6 right-8 hamburger lg:hidden focus:outline-none">
+            {% comment %} <svg class="fill-green-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>   {% endcomment %}
             <svg class="w-6 h-6 fill-green-400" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
           </button>
         </div>
-        <div id="menu" class="fixed sm:static sm:flex-1 flex flex-wrap sm:flex-row-reverse items-center justify-center gap-3 sm:mr-40 overflow-hidden transition-[max-height] duration-700 ease-in-out max-h-0 sm:max-h-screen">
-          <a href="#" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">العمليات المالية</a>
-          <a href="#" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الملخص</a>
-          <a href="#" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">القروض</a>
-          <a href="#" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الاستثمارات</a>
+        <div id="menu" class="fixed lg:static max-h-0 lg:max-h-screen lg:flex-1 flex flex-wrap flex-row-reverse items-center justify-center gap-3 lg:mr-40 overflow-hidden transition-[max-height] duration-700 ease-in-out">
+          <a href="{% url 'trust' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الملخص</a>
+          <a href="{% url 'loans' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">القروض</a>
+          <a href="{% url 'investments' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الاستثمارات</a>
+          <a href="{% url 'subscriptions' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الاشتراكات</a>
           <a href="{% url 'members' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">الأعضاء</a>
+          <a href="{% url 'transactions' %}" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">العمليات المالية</a>
           <a href="#" class="nav-link bg-green-700 text-gray-50 rounded-sm p-2 font-bold border-green-900 border-2 opacity-0 sm:opacity-100 hover:bg-white hover:text-green-700 hover:border-none focus:bg-white focus:text-green-700 focus:border-none transition ease-in duration-600">اللائحة</a>
         </div>
     </div>

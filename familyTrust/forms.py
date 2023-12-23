@@ -11,12 +11,31 @@ class UpdateMemberForm(forms.ModelForm):
         model = Member
         fields = ['position',]
 
-class TransactionTypeForm(forms.ModelForm):
+class LoanForm(forms.ModelForm):
     class Meta:
-        model = TransactionType
+        model = Loan
+        fields = '__all__'
+        widgets = {
+            "l_date": forms.DateInput(attrs={"type":"date"}),
+        }
+
+class InvestmentForm(forms.ModelForm):
+    class Meta:
+        model = Investment
+        fields = '__all__'
+        widgets = {
+            "i_date": forms.DateInput(attrs={"type":"date"}),
+        }
+
+class SubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = Subscription
         fields = '__all__'
 
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = '__all__'
+        widgets = {
+            "t_date": forms.DateInput(attrs={"type":"date"}),
+        }

@@ -1,0 +1,35 @@
+<table class="hidden md:table table-auto min-w-full border-collapse border border-green-400 rounded-xl" dir="rtl">
+    <thead class="bg-green-200 text-xl font-semibold border border-green-600 rounded">
+      <tr>
+        <th class="p-5 border-r border-r-green-500">السنة</th>
+        <th class="border-r border-green-500">المبلغ</th>
+        <th class="border-r border-green-500">تعديل</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+        {% for subscription in subscriptions %}
+            <tr {% if forloop.counter|divisibleby:"2" %}class="bg-green-100"{% endif %}>
+                <td class="border-r border-green-500">{{ subscription.year }}</td>
+                <td class="border-r border-green-500">{{ subscription.amount }}</td>
+                <td class="border-r border-green-500 py-3">
+                    <a href="{% url 'update-subscription' subscription.id %}" class="text-green-600 rounded-sm p-2 font-bold border-green-500 border hover:bg-green-500 hover:text-white hover:border-none focus:bg-green-500 focus:text-white focus:border-none transition ease-in duration-600">تعديل</a>
+                    <a href="{% url 'delete-subscription' subscription.id %}" class="text-red-600 rounded-sm p-2 font-bold border-red-500 border hover:bg-red-500 hover:text-white hover:border-none transition ease-in duration-600">حذف</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="container mx-auto p-4 md:hidden" dir="rtl">
+    {% for subscription in subscriptions  %}
+        <div class="bg-white shadow-md rounded mb-4 border border-green-600">
+            <div class="font-bold border-b border-green-600">
+                <span class="bg-green-100 py-2 px-4 inline-block w-48">السنة:</span>
+                <span class="inline-block px-3">{{ subscription.year }}</span>
+            </div>
+            <div class="font-bold border-b border-green-600">
+                <span class="bg-green-100 py-2 px-4 inline-block w-48">المبلغ:</span>
+                <span class="inline-block px-3">{{ subscription.amount }}</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>

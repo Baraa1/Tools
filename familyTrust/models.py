@@ -12,28 +12,24 @@ class Member(models.Model):
 class Loan(models.Model):
     amount     = models.FloatField(verbose_name='المبلغ')
     l_date     = models.DateField(verbose_name='تاريخ الحوالة')
-    ref        = models.CharField(max_length=150, verbose_name='الرقم المرجعي')
     installments       = models.IntegerField(verbose_name='عدد الدفعات')
     installment_amount = models.IntegerField(verbose_name='مبلغ الدفعة')
     paid               = models.BooleanField(default=False, verbose_name='تم تسديده')
     remarks            = models.TextField(verbose_name='ملاحظات', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.l_receiver} - {self.amount} - {self.remarks}'
+        return f'{self.amount} - {self.remarks}'
 
 class Investment(models.Model):
     amount     = models.FloatField(verbose_name='المبلغ')
     i_date     = models.DateField(verbose_name='تاريخ الحوالة')
-    ref        = models.CharField(max_length=150, verbose_name='الرقم المرجعي')
-    installments       = models.IntegerField(verbose_name='عدد الدفعات')
-    installment_amount = models.IntegerField(verbose_name='مبلغ الدفعة')
     # status = Finished or on-going
     status             = models.BooleanField(default=False, verbose_name='حالة الاستثمار (مستمر أو منتهي)')
     profits_or_losses  = models.FloatField(verbose_name='الأرباح أو الخسائر')
     remarks            = models.TextField(verbose_name='ملاحظات', blank=True, null=True)
     
     def __str__(self):
-        return f'{self.i_receiver} - {self.amount} - {self.remarks}'
+        return f'{self.amount} - {self.remarks}'
 
 class Subscription(models.Model):
     year   = models.CharField(max_length=150, verbose_name='السنة')

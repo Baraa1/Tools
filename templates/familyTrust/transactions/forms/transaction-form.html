@@ -1,0 +1,157 @@
+{% load widget_tweaks %}
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="sender">
+        مرسل الحوالة
+    </label>
+    {% if form.sender.errors %}
+        {% render_field form.sender class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مرسل الحوالة" %}
+        {% for error in form.sender.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.sender class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مرسل الحوالة" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/3 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="t_receiver">
+        مستقبل الحوالة
+    </label>
+    {% if form.t_receiver.errors %}
+        {% render_field form.t_receiver class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مستقبل الحوالة" %}
+        {% for error in form.t_receiver.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.t_receiver class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مستقبل الحوالة" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="amount">
+        المبلغ
+    </label>
+    {% if form.amount.errors %}
+        {% render_field form.amount class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="المبلغ" %}
+        {% for error in form.amount.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.amount class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="المبلغ" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/3 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="t_date">
+        تاريخ التحويل
+    </label>
+    {% if form.t_date.errors %}
+        {% render_field form.t_date class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تاريخ التحويل" %}
+        {% for error in form.t_date.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.t_date class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تاريخ التحويل" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="ref">
+        الرقم المرجعي للحوالة
+    </label>
+    {% if form.ref.errors %}
+        {% render_field form.ref class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="الرقم المرجعي للحوالة" %}
+        {% for error in form.ref.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.ref class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="الرقم المرجعي للحوالة" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/3 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="bank">
+        البنك المرسل للحوالة
+    </label>
+    {% if form.bank.errors %}
+        {% render_field form.bank class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="البنك المرسل للحوالة" %}
+        {% for error in form.bank.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.bank class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="البنك المرسل للحوالة" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="t_type">
+        نوع الحوالة
+    </label>
+    {% if form.t_type.errors %}
+        {% render_field form.t_type class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="نوع الحوالة" %}
+        {% for error in form.t_type.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.t_type class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="نوع الحوالة" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="positive">
+        دخل او انفاق
+    </label>
+    {% if form.positive.errors %}
+        {% render_field form.positive class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="دخل او انفاق" %}
+        {% for error in form.positive.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.positive class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="دخل او انفاق" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="loan">
+        قرض
+    </label>
+    {% if form.loan.errors %}
+        {% render_field form.loan class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="قرض" %}
+        {% for error in form.loan.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.loan class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="قرض" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="investment">
+        استثمار
+    </label>
+    {% if form.investment.errors %}
+        {% render_field form.investment class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="استثمار" %}
+        {% for error in form.investment.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.investment class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="استثمار" %}
+    {% endif %}
+</div>
+<div class="md:basis-1/2 mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="subscription">
+        اشترراك
+    </label>
+    {% if form.subscription.errors %}
+        {% render_field form.subscription class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="اشترراك" %}
+        {% for error in form.subscription.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.subscription class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="اشترراك" %}
+    {% endif %}
+</div>
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="remarks">
+        ملاحظات
+    </label>
+    {% if form.remarks.errors %}
+        {% render_field form.remarks class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="ملاحظات" %}
+        {% for error in form.remarks.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.remarks class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="ملاحظات" %}
+    {% endif %}
+</div>

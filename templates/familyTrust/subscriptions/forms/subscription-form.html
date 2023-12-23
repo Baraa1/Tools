@@ -1,0 +1,27 @@
+{% load widget_tweaks %}
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="year">
+        السنة
+    </label>
+    {% if form.year.errors %}
+        {% render_field form.year class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+        {% for error in form.year.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.year class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+    {% endif %}
+</div>
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="amount">
+        المبلغ
+    </label>
+    {% if form.amount.errors %}
+        {% render_field form.amount class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+        {% for error in form.amount.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.amount class="shadow appearance-none border rounded w-full py-2 px-3 text-right text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+    {% endif %}
+</div>

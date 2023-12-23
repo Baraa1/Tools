@@ -1,7 +1,7 @@
 <table class="table-auto min-w-full border-collapse border border-green-400 rounded-xl" dir="rtl">
     <thead class="bg-green-200 text-xl font-semibold border border-green-600 rounded">
       <tr>
-        <th class="p-5 border-r border-r-green-500">اسم المستخدم</th>
+        <th class="p-5 border-r border-r-green-500">الإسم</th>
         <th class="border-r border-green-500">المنصب</th>
         <th class="border-r border-green-500">تعديل</th>
       </tr>
@@ -9,7 +9,7 @@
     <tbody class="text-center">
         {% for member in members %}
             <tr {% if forloop.counter|divisibleby:"2" %}class="bg-green-100"{% endif %}>
-                <td class="border-r border-green-500">{{ member.member.username }}</td>
+                <td class="border-r border-green-500">{{ member.ar_name }}</td>
                 <td class="border-r border-green-500">{{ member.position }}</td>
                 <td class="border-r border-green-500 py-3">
                     <a href="{% url 'update-member' member.id %}" class="text-green-600 rounded-sm p-2 font-bold border-green-500 border hover:bg-green-500 hover:text-white hover:border-none focus:bg-green-500 focus:text-white focus:border-none transition ease-in duration-600">تعديل</a>

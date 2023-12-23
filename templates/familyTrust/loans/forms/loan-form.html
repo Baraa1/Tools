@@ -1,0 +1,89 @@
+{% load widget_tweaks %}
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="amount">
+        المبلغ
+    </label>
+    {% if form.amount.errors %}
+        {% render_field form.amount class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+        {% for error in form.amount.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.amount class="shadow appearance-none border rounded w-full py-2 px-3 text-right text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+    {% endif %}
+</div>
+{% if form.l_date %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="l_date">
+            التاريخ
+        </label>
+        {% if form.l_date.errors %}
+            {% render_field form.l_date class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+            {% for error in form.l_date.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.l_date class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.installments %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="installments">
+            عدد الدفعات
+        </label>
+        {% if form.installments.errors %}
+            {% render_field form.installments class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="10" %}
+            {% for error in form.installments.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.installments class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="10" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.installment_amount %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="installment_amount">
+            مبلغ الدفعة
+        </label>
+        {% if form.installment_amount.errors %}
+            {% render_field form.installment_amount class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="200" %}
+            {% for error in form.installment_amount.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.installment_amount class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="200" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.paid %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="paid">
+            تم تسديده
+        </label>
+        {% if form.paid.errors %}
+            {% render_field form.paid class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="نعم" %}
+            {% for error in form.paid.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.paid class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="نعم" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.remarks %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="remarks">
+            ملاحظات
+        </label>
+        {% if form.remarks.errors %}
+            {% render_field form.remarks class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تم سداده في 9 دفعات" %}
+            {% for error in form.remarks.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.remarks class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تم سداده في 9 دفعات" %}
+        {% endif %}
+    </div>
+{% endif %}

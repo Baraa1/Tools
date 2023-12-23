@@ -1,0 +1,74 @@
+{% load widget_tweaks %}
+<div class="mb-4">
+    <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="amount">
+        المبلغ
+    </label>
+    {% if form.amount.errors %}
+        {% render_field form.amount class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+        {% for error in form.amount.errors  %}
+            <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+        {% endfor %}
+    {% else %}
+        {% render_field form.amount class="shadow appearance-none border rounded w-full py-2 px-3 text-right text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2000" %}
+    {% endif %}
+</div>
+{% if form.i_date %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="i_date">
+            التاريخ
+        </label>
+        {% if form.i_date.errors %}
+            {% render_field form.i_date class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+            {% for error in form.i_date.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.i_date class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="2018-10-22" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.status %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="status">
+            الحالة
+        </label>
+        {% if form.status.errors %}
+            {% render_field form.status class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مستمر - متوقف - منتهي" %}
+            {% for error in form.status.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.status class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="مستمر - متوقف - منتهي" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.profits_or_losses %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="profits_or_losses">
+            مبلغ الربح أو الخسارة
+        </label>
+        {% if form.profits_or_losses.errors %}
+            {% render_field form.profits_or_losses class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="200" %}
+            {% for error in form.profits_or_losses.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.profits_or_losses class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="200" %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if form.remarks %}
+    <div class="mb-4">
+        <label class="block text-right text-gray-700 text-sm font-bold mb-2" for="remarks">
+            ملاحظات
+        </label>
+        {% if form.remarks.errors %}
+            {% render_field form.remarks class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تم سداده في 9 دفعات" %}
+            {% for error in form.remarks.errors  %}
+                <span class="block text-red-500 text-sm font-light mt-1 ml-1">{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {% render_field form.remarks class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="تم سداده في 9 دفعات" %}
+        {% endif %}
+    </div>
+{% endif %}

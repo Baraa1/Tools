@@ -8,22 +8,23 @@ function nav_bar(){
     hamburger.addEventListener('click', function() {
         if (inTransit) return;
         inTransit = true;
-        if (menu.classList.contains('max-h-0') && menu.classList.contains('fixed') && !menu.classList.contains('max-h-screen')) {
-            //menu.classList.remove('max-h-0');
+        if (menu.classList.contains('max-h-0') && !menu.classList.contains('max-h-screen')) {
+            menu.classList.remove('max-h-0');
             menu.classList.add('max-h-screen');
             menu.classList.remove('fixed');
             setTimeout(() => {
-            btns.forEach(btn => {btn.classList.remove('opacity-0');btn.classList.add('opacity-100')})
-            // Reset isAnimating after the longest duration (transition + staggered effect)
-            inTransit = false;
-            }, 10)
+                btns.forEach(btn => {btn.classList.remove('opacity-0');btn.classList.add('opacity-100')})
+                // Reset isAnimating after the longest duration (transition + staggered effect)
+                inTransit = false;
+            }, 600)
         } else {
             menu.classList.remove('max-h-screen');
             btns.forEach(btn => {btn.classList.add('opacity-0');btn.classList.remove('opacity-100')})
             setTimeout(() => {
-            menu.classList.add('fixed');
-            // Reset isAnimating after the longest duration (transition + staggered effect)
-            inTransit = false;
+                menu.classList.add('fixed');
+                menu.classList.add('max-h-0');
+                // Reset isAnimating after the longest duration (transition + staggered effect)
+                inTransit = false;
             }, 600); // Match the duration of the transition
         }
     });
@@ -73,5 +74,5 @@ function trust_navbar_active_link(){
     });
 };
 nav_bar();
-navbar_active_link();
+//navbar_active_link();
 trust_navbar_active_link();
